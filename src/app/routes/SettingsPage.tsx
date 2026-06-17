@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { AccountsManager } from '@/features/accounts/AccountsManager';
 import { CategoriesManager } from '@/features/categories/CategoriesManager';
 import { ExcelExport } from '@/features/excel/ExcelExport';
+import { ExcelImport } from '@/features/excel/ExcelImport';
 import { ProfilesManager } from '@/features/profiles/ProfilesManager';
 import { SecuritySettings } from '@/features/security/SecuritySettings';
 import { CsvTools } from '@/features/transactions/CsvTools';
@@ -29,6 +30,7 @@ export function SettingsPage() {
       <RulesManager />
       <CsvTools />
       <ExcelExport />
+      <ExcelImport />
       <Card>
         <CardContent className="p-4 text-sm text-muted-foreground">
           {t('settings.privacy')}

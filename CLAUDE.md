@@ -254,11 +254,12 @@ Requisitos: Node 22+, pnpm 10+.
   Movimientos + Presupuestos con fórmulas; ExcelJS lazy; una dirección).
 - **Fase 5** ✅: Motor FIRE (FI number, años hasta FI, proyección) + simulador
   Monte Carlo en Web Worker + FinScore (salud financiera 0-100).
-- **Fase 6**: Reglas automáticas, metas avanzadas, multi-perfil local.
-- **Fase 7** (posterior, aislada): Excel bidireccional con reconciliación.
+- **Fase 6** ✅: Reglas automáticas (auto-categorización), metas de ahorro y
+  multi-perfil local (bases de datos cifradas independientes por perfil).
+- **Fase 7** ✅: Excel bidireccional con reconciliación por `id` (aislada).
 
-> **Estamos en**: Fases 1-5 completas. Pendiente: Fase 6 (reglas automáticas,
-> metas avanzadas, multi-perfil) y Fase 7 (Excel bidireccional, aislada).
+> **Estamos en**: **todas las fases (0-7) completas**. Además: web pública
+> (landing + blog) con SEO y la app servida bajo `/app`.
 
 Aviso a decidir más adelante: el "multi-dispositivo cifrado" choca con "100%
 local" (sync E2E peer-to-peer o se descarta).
@@ -268,7 +269,9 @@ local" (sync E2E peer-to-peer o se descarta).
 ## 14. QUÉ NO HACER (lista negra)
 
 - ❌ No añadir llamadas a la nube ni analytics.
-- ❌ No implementar Excel bidireccional todavía (solo exportación).
+- ⚠️ Excel bidireccional ya existe (Fase 7), pero es un módulo AISLADO
+  (`features/excel/importWorkbook`): no mezclarlo con el resto del flujo ni
+  romper la reconciliación por `id`.
 - ❌ No usar floats para dinero (siempre `Cents`).
 - ❌ No saltarse la capa de repositorios ni el cifrado.
 - ❌ No introducir dependencias pesadas sin justificarlo.

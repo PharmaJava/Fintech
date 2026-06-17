@@ -143,6 +143,8 @@ function buildTransactionsSheet(
       width: 16,
       style: { numFmt: MONEY_FMT },
     },
+    // Columna id para reconciliacion en la importacion bidireccional (Fase 7).
+    { header: 'id', key: 'id', width: 36 },
   ];
   styleHeader(sheet.getRow(1));
 
@@ -159,6 +161,7 @@ function buildTransactionsSheet(
       category: categoryName.get(txn.categoryId) ?? '',
       note: txn.note,
       amount: signed,
+      id: txn.id,
     });
   }
 }

@@ -192,8 +192,15 @@ export const messages = {
     'excel.title': 'Exportar a Excel',
     'excel.export': 'Descargar Excel (.xlsx)',
     'excel.help':
-      'Genera un libro con Resumen, Patrimonio, Movimientos y Presupuestos (con formulas). Solo exportacion.',
+      'Genera un libro con Resumen, Patrimonio, Movimientos y Presupuestos (con formulas).',
     'excel.generating': 'Generando…',
+    'excelImport.title': 'Importar Excel (bidireccional)',
+    'excelImport.import': 'Importar .xlsx',
+    'excelImport.help':
+      'Edita la hoja Movimientos del Excel exportado y vuelve a importarla: se reconcilian por id (actualiza existentes, inserta nuevos). Nunca borra.',
+    'excelImport.created': 'creados',
+    'excelImport.updated': 'actualizados',
+    'excelImport.errors': 'filas con errores',
 
     'common.save': 'Guardar',
     'common.cancel': 'Cancelar',

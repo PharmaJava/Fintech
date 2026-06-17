@@ -8,6 +8,7 @@
 import { format } from 'date-fns';
 import { create } from 'zustand';
 
+import type { ExcelTxnRow } from '@/features/excel/importWorkbook';
 import { matchCategory } from '@/features/transactions/autorules';
 import { dueOccurrences } from '@/features/transactions/recurring';
 import type { CsvImportRow } from '@/features/transactions/csv';
@@ -108,6 +109,10 @@ interface FinanceState {
   addAutoRule: (keyword: string, categoryId: string) => Promise<void>;
   deleteAutoRule: (id: string) => Promise<void>;
   applyAutoRulesToExisting: () => Promise<number>;
+
+  reconcileFromExcel: (
+    rows: readonly ExcelTxnRow[],
+  ) => Promise<{ created: number; updated: number }>;
 }
 
 export const useFinanceStore = create<FinanceState>((set, get) => ({
@@ -337,5 +342,81 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       set({ transactions: await transactionRepository.getAll() });
     }
     return changed;
+  },
+
+  /** Reconcilia movimientos desde un Excel: actualiza por id e inserta nuevos (Fase 7). */
+  reconcileFromExcel: async (rows) => {
+    const accountByName = new Map(
+      get().accounts.map((a) => [a.name.toLowerCase(), a.id]),
+    );
+    const categoryByName = new Map(
+      get().categories.map((c) => [c.name.toLowerCase(), c.id]),
+    );
+    const existingById = new Map(get().transactions.map((t) => [t.id, t]));
+
+    const resolveAccount = async (name: string): Promise<string> => {
+      const existing = accountByName.get(name.toLowerCase());
+      if (existing) return existing;
+      const account = await accountRepository.add({
+        name,
+        type: 'bank',
+        currency: 'EUR',
+      });
+      accountByName.set(name.toLowerCase(), account.id);
+      return account.id;
+    };
+    const resolveCategory = async (
+      name: string,
+      kind: CategoryKind,
+    ): Promise<string> => {
+      const existing = categoryByName.get(name.toLowerCase());
+      if (existing) return existing;
+      const category = await categoryRepository.add({
+        name,
+        kind,
+        color: '#64748b',
+      });
+      categoryByName.set(name.toLowerCase(), category.id);
+      return category.id;
+    };
+
+    let created = 0;
+    let updated = 0;
+    for (const row of rows) {
+      const accountId = await resolveAccount(row.account);
+      const categoryId = await resolveCategory(
+        row.category,
+        row.type === 'income' ? 'income' : 'expense',
+      );
+      const base = {
+        type: row.type,
+        amount: toCents(row.amount),
+        accountId,
+        categoryId,
+        date: row.date,
+        note: row.note,
+      };
+      const existing = row.id ? existingById.get(row.id) : undefined;
+      if (existing) {
+        await transactionRepository.put({
+          ...base,
+          id: existing.id,
+          createdAt: existing.createdAt,
+          tags: existing.tags,
+        });
+        updated += 1;
+      } else {
+        await transactionRepository.put({
+          ...base,
+          id: row.id ?? crypto.randomUUID(),
+          createdAt: new Date().toISOString(),
+          tags: [],
+        });
+        created += 1;
+      }
+    }
+
+    await get().load();
+    return { created, updated };
   },
 }));
