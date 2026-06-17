@@ -41,12 +41,13 @@ function chunk(type, data) {
   return Buffer.concat([lenBuf, typeBuf, data, crcBuf]);
 }
 
-function solidPng(size) {
+// Genera un PNG RGBA. `painter(x, y)` devuelve {r,g,b,a} por pixel.
+function makePng(width, height, painter) {
   const sig = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
 
   const ihdr = Buffer.alloc(13);
-  ihdr.writeUInt32BE(size, 0);
-  ihdr.writeUInt32BE(size, 4);
+  ihdr.writeUInt32BE(width, 0);
+  ihdr.writeUInt32BE(height, 4);
   ihdr[8] = 8; // bit depth
   ihdr[9] = 6; // color type RGBA
   ihdr[10] = 0;
@@ -54,17 +55,18 @@ function solidPng(size) {
   ihdr[12] = 0;
 
   const bytesPerPixel = 4;
-  const stride = size * bytesPerPixel;
-  const raw = Buffer.alloc((stride + 1) * size);
-  for (let y = 0; y < size; y++) {
+  const stride = width * bytesPerPixel;
+  const raw = Buffer.alloc((stride + 1) * height);
+  for (let y = 0; y < height; y++) {
     const rowStart = y * (stride + 1);
     raw[rowStart] = 0; // filter type none
-    for (let x = 0; x < size; x++) {
+    for (let x = 0; x < width; x++) {
       const p = rowStart + 1 + x * bytesPerPixel;
-      raw[p] = COLOR.r;
-      raw[p + 1] = COLOR.g;
-      raw[p + 2] = COLOR.b;
-      raw[p + 3] = COLOR.a;
+      const c = painter(x, y);
+      raw[p] = c.r;
+      raw[p + 1] = c.g;
+      raw[p + 2] = c.b;
+      raw[p + 3] = c.a;
     }
   }
 
@@ -75,6 +77,8 @@ function solidPng(size) {
     chunk('IEND', Buffer.alloc(0)),
   ]);
 }
+
+const solidPng = (size) => makePng(size, size, () => COLOR);
 
 const targets = [
   ['pwa-192x192.png', 192],
@@ -91,3 +95,16 @@ const faviconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 writeFileSync(join(publicDir, 'favicon.svg'), faviconSvg);
 writeFileSync(join(publicDir, 'icon.svg'), faviconSvg);
 console.log('generado favicon.svg + icon.svg');
+
+// OG image 1200x630: degradado oscuro de marca (placeholder; reemplazar por arte).
+const og = makePng(1200, 630, (x, y) => {
+  const t = (x / 1200 + y / 630) / 2;
+  return {
+    r: Math.round(0x0f + (0x05 - 0x0f) * t),
+    g: Math.round(0x17 + (0x96 - 0x17) * t),
+    b: Math.round(0x2a + (0x69 - 0x2a) * t),
+    a: 0xff,
+  };
+});
+writeFileSync(join(publicDir, 'og-image.png'), og);
+console.log('generado og-image.png (1200x630)');

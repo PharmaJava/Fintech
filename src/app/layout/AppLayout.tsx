@@ -1,6 +1,6 @@
 import { Lock, Moon, Sun } from 'lucide-react';
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
 import { t } from '@/i18n';
@@ -45,9 +45,9 @@ export function AppLayout() {
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-20 flex items-center justify-between border-b bg-background/95 px-4 py-3 backdrop-blur">
-        <span className="text-lg font-semibold tracking-tight">
+        <Link to="/" className="text-lg font-semibold tracking-tight">
           {t('app.name')}
-        </span>
+        </Link>
         <div className="flex items-center gap-1">
           <Button
             variant="ghost"

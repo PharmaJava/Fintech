@@ -1,21 +1,16 @@
 import { RouterProvider } from 'react-router-dom';
 
-import { router } from '@/app/router';
 import { ThemeProvider } from '@/app/providers';
-import { UnlockScreen } from '@/features/security/UnlockScreen';
-import { useIsUnlocked } from '@/features/security/useSession';
+import { router } from '@/app/router';
 
 /**
- * Raiz de la app: aplica el tema y decide entre la pantalla de desbloqueo
- * (bloqueada) y la app navegable (desbloqueada). El cifrado y los datos solo
- * son accesibles tras introducir el PIN.
+ * Raíz de la app: provee el tema y el router. El router separa la web pública
+ * (landing + blog) de la aplicación privada (/app), gateada por PIN.
  */
 function App() {
-  const unlocked = useIsUnlocked();
-
   return (
     <ThemeProvider>
-      {unlocked ? <RouterProvider router={router} /> : <UnlockScreen />}
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 }

@@ -18,10 +18,10 @@ export interface NavItem {
 
 /** Items de navegacion, compartidos por la barra lateral (desktop) e inferior (movil). */
 export const NAV_ITEMS: NavItem[] = [
-  { to: '/', labelKey: 'nav.dashboard', icon: LayoutDashboard, end: true },
-  { to: '/networth', labelKey: 'nav.networth', icon: Wallet },
-  { to: '/transactions', labelKey: 'nav.transactions', icon: Receipt },
-  { to: '/budgets', labelKey: 'nav.budgets', icon: PiggyBank },
-  { to: '/fire', labelKey: 'nav.fire', icon: Flame },
-  { to: '/settings', labelKey: 'nav.settings', icon: Settings },
+  { to: '/app', labelKey: 'nav.dashboard', icon: LayoutDashboard, end: true },
+  { to: '/app/networth', labelKey: 'nav.networth', icon: Wallet },
+  { to: '/app/transactions', labelKey: 'nav.transactions', icon: Receipt },
+  { to: '/app/budgets', labelKey: 'nav.budgets', icon: PiggyBank },
+  { to: '/app/fire', labelKey: 'nav.fire', icon: Flame },
+  { to: '/app/settings', labelKey: 'nav.settings', icon: Settings },
 ];

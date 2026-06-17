@@ -28,8 +28,8 @@ export default defineConfig(({ command }) => {
           theme_color: '#0f172a',
           background_color: '#0f172a',
           display: 'standalone',
-          // start_url y scope relativos a la subruta de GitHub Pages.
-          start_url: base,
+          // Instalada, la PWA abre directamente la app; el scope cubre toda la web.
+          start_url: `${base}app`,
           scope: base,
           icons: [
             { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
