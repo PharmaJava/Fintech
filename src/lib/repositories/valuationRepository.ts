@@ -1,4 +1,4 @@
-import { db } from '@/lib/db';
+import { getDb } from '@/lib/db';
 import type { StoredValuation } from '@/lib/db';
 import type { RefType, Valuation } from '@/types/domain';
 
@@ -12,7 +12,7 @@ export type NewValuation = Pick<
 
 class ValuationRepository extends SecureRepository<Valuation, StoredValuation> {
   constructor() {
-    super(db.valuations);
+    super(() => getDb().valuations);
   }
 
   protected async toStored(

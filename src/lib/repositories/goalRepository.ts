@@ -1,5 +1,5 @@
 import { decryptString, encryptString } from '@/lib/crypto';
-import { db } from '@/lib/db';
+import { getDb } from '@/lib/db';
 import type { StoredGoal } from '@/lib/db';
 import type { Goal } from '@/types/domain';
 
@@ -11,7 +11,7 @@ export type NewGoal = Pick<Goal, 'name' | 'target' | 'current'> &
 
 class GoalRepository extends SecureRepository<Goal, StoredGoal> {
   constructor() {
-    super(db.goals);
+    super(() => getDb().goals);
   }
 
   protected async toStored(domain: Goal, key: CryptoKey): Promise<StoredGoal> {

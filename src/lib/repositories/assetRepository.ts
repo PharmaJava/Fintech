@@ -1,5 +1,5 @@
 import { decryptString, encryptString } from '@/lib/crypto';
-import { db } from '@/lib/db';
+import { getDb } from '@/lib/db';
 import type { StoredAsset } from '@/lib/db';
 import type { Asset } from '@/types/domain';
 
@@ -9,7 +9,7 @@ export type NewAsset = Pick<Asset, 'name' | 'category' | 'currency'>;
 
 class AssetRepository extends SecureRepository<Asset, StoredAsset> {
   constructor() {
-    super(db.assets);
+    super(() => getDb().assets);
   }
 
   protected async toStored(

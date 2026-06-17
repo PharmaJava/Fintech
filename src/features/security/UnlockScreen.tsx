@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { ProfileSwitcher } from '@/features/profiles/ProfileSwitcher';
 import { t } from '@/i18n';
 
 import {
@@ -80,7 +81,10 @@ export function UnlockScreen() {
   };
 
   return (
-    <main className="flex min-h-dvh items-center justify-center p-6">
+    <main className="flex min-h-dvh flex-col items-center justify-center gap-3 p-6">
+      <div className="w-full max-w-sm">
+        <ProfileSwitcher />
+      </div>
       <Card className="w-full max-w-sm">
         <CardHeader>
           <div className="mb-2 flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">

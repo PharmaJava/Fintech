@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { AccountsManager } from '@/features/accounts/AccountsManager';
 import { CategoriesManager } from '@/features/categories/CategoriesManager';
 import { ExcelExport } from '@/features/excel/ExcelExport';
+import { ProfilesManager } from '@/features/profiles/ProfilesManager';
 import { SecuritySettings } from '@/features/security/SecuritySettings';
 import { CsvTools } from '@/features/transactions/CsvTools';
 import { RulesManager } from '@/features/transactions/RulesManager';
@@ -21,6 +22,7 @@ export function SettingsPage() {
   return (
     <div className="space-y-4">
       <PageHeader title={t('settings.title')} />
+      <ProfilesManager />
       <SecuritySettings />
       <AccountsManager />
       <CategoriesManager />

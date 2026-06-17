@@ -5,7 +5,7 @@
  * Lee/escribe mediante los repositorios (cifrado transparente con la clave de
  * sesion actual). El borrado limpia las tablas de datos, no `appMeta`.
  */
-import { db } from '@/lib/db';
+import { getDb } from '@/lib/db';
 import type {
   Account,
   Asset,
@@ -85,16 +85,16 @@ export const snapshotAll = async (): Promise<DataSnapshot> => {
 /** Borra todos los datos de usuario (no toca `appMeta`). */
 export const clearAllData = async (): Promise<void> => {
   await Promise.all([
-    db.accounts.clear(),
-    db.assets.clear(),
-    db.liabilities.clear(),
-    db.valuations.clear(),
-    db.transactions.clear(),
-    db.categories.clear(),
-    db.budgets.clear(),
-    db.recurringRules.clear(),
-    db.goals.clear(),
-    db.autoRules.clear(),
+    getDb().accounts.clear(),
+    getDb().assets.clear(),
+    getDb().liabilities.clear(),
+    getDb().valuations.clear(),
+    getDb().transactions.clear(),
+    getDb().categories.clear(),
+    getDb().budgets.clear(),
+    getDb().recurringRules.clear(),
+    getDb().goals.clear(),
+    getDb().autoRules.clear(),
   ]);
 };
 

@@ -17,7 +17,7 @@ import {
   saltToBase64,
   setSessionKey,
 } from '@/lib/crypto';
-import { db, SCHEMA_VERSION } from '@/lib/db';
+import { getDb, SCHEMA_VERSION } from '@/lib/db';
 import {
   accountRepository,
   assetRepository,
@@ -46,7 +46,7 @@ export const getLockRemainingMs = (): number =>
 
 /** `true` si ya existe un PIN configurado en este dispositivo. */
 export const isPinConfigured = async (): Promise<boolean> => {
-  const meta = await db.appMeta.get('app');
+  const meta = await getDb().appMeta.get('app');
   return meta !== undefined;
 };
 
@@ -57,7 +57,7 @@ export const setupPin = async (pin: string): Promise<void> => {
   const key = await deriveKey(pin, salt);
   const verifier = await encryptString(key, VERIFIER_PLAINTEXT);
 
-  await db.appMeta.put({
+  await getDb().appMeta.put({
     id: 'app',
     salt: saltToBase64(salt),
     verifier,
@@ -70,7 +70,7 @@ export const setupPin = async (pin: string): Promise<void> => {
 
 /** Deriva y verifica la clave de un PIN contra el verificador almacenado. */
 const deriveVerifiedKey = async (pin: string): Promise<CryptoKey | null> => {
-  const meta = await db.appMeta.get('app');
+  const meta = await getDb().appMeta.get('app');
   if (!meta) {
     throw new Error('No hay PIN configurado en este dispositivo.');
   }
@@ -141,7 +141,7 @@ export const changePin = async (
   ]);
 
   // Derivar clave nueva y activarla.
-  const meta = await db.appMeta.get('app');
+  const meta = await getDb().appMeta.get('app');
   const newSalt = generateSalt();
   const newKey = await deriveKey(newPin, newSalt);
   const verifier = await encryptString(newKey, VERIFIER_PLAINTEXT);
@@ -161,7 +161,7 @@ export const changePin = async (
     ...autoRules.map((x) => autoRuleRepository.put(x)),
   ]);
 
-  await db.appMeta.put({
+  await getDb().appMeta.put({
     id: 'app',
     salt: saltToBase64(newSalt),
     verifier,

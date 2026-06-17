@@ -1,5 +1,5 @@
 import { decryptString, encryptString } from '@/lib/crypto';
-import { db } from '@/lib/db';
+import { getDb } from '@/lib/db';
 import type { StoredAutoRule } from '@/lib/db';
 import type { AutoRule } from '@/types/domain';
 
@@ -9,7 +9,7 @@ export type NewAutoRule = Pick<AutoRule, 'keyword' | 'categoryId'>;
 
 class AutoRuleRepository extends SecureRepository<AutoRule, StoredAutoRule> {
   constructor() {
-    super(db.autoRules);
+    super(() => getDb().autoRules);
   }
 
   protected async toStored(

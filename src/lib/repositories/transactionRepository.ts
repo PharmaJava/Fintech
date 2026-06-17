@@ -1,5 +1,5 @@
 import { decryptString, encryptString } from '@/lib/crypto';
-import { db } from '@/lib/db';
+import { getDb } from '@/lib/db';
 import type { StoredTransaction } from '@/lib/db';
 import type { Transaction } from '@/types/domain';
 
@@ -16,7 +16,7 @@ class TransactionRepository extends SecureRepository<
   StoredTransaction
 > {
   constructor() {
-    super(db.transactions);
+    super(() => getDb().transactions);
   }
 
   protected async toStored(

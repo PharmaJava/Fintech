@@ -1,4 +1,4 @@
-import { db } from '@/lib/db';
+import { getDb } from '@/lib/db';
 import type { StoredBudget } from '@/lib/db';
 import type { Budget } from '@/types/domain';
 
@@ -9,7 +9,7 @@ export type NewBudget = Pick<Budget, 'categoryId' | 'month' | 'limit'>;
 
 class BudgetRepository extends SecureRepository<Budget, StoredBudget> {
   constructor() {
-    super(db.budgets);
+    super(() => getDb().budgets);
   }
 
   protected async toStored(

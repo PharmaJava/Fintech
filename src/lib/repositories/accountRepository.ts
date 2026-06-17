@@ -1,5 +1,5 @@
 import { decryptString, encryptString } from '@/lib/crypto';
-import { db } from '@/lib/db';
+import { getDb } from '@/lib/db';
 import type { StoredAccount } from '@/lib/db';
 import type { Account } from '@/types/domain';
 
@@ -9,7 +9,7 @@ export type NewAccount = Pick<Account, 'name' | 'type' | 'currency'>;
 
 class AccountRepository extends SecureRepository<Account, StoredAccount> {
   constructor() {
-    super(db.accounts);
+    super(() => getDb().accounts);
   }
 
   protected async toStored(

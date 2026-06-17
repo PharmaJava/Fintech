@@ -25,7 +25,18 @@ export abstract class SecureRepository<
   TDomain extends { id: string },
   TStored extends { id: string },
 > {
-  protected constructor(protected readonly table: SecureTable<TStored>) {}
+  /**
+   * La tabla se resuelve de forma diferida (`getTable`) para soportar multi-perfil:
+   * al cambiar de perfil, la base de datos activa cambia y el repositorio apunta
+   * automáticamente a la tabla correcta.
+   */
+  protected constructor(
+    protected readonly getTable: () => SecureTable<TStored>,
+  ) {}
+
+  protected get table(): SecureTable<TStored> {
+    return this.getTable();
+  }
 
   /** Mapea dominio -> registro persistido (cifrando campos sensibles). */
   protected abstract toStored(

@@ -1,5 +1,5 @@
 import { decryptString, encryptString } from '@/lib/crypto';
-import { db } from '@/lib/db';
+import { getDb } from '@/lib/db';
 import type { StoredCategory } from '@/lib/db';
 import type { Category } from '@/types/domain';
 
@@ -10,7 +10,7 @@ export type NewCategory = Pick<Category, 'name' | 'kind' | 'color'> &
 
 class CategoryRepository extends SecureRepository<Category, StoredCategory> {
   constructor() {
-    super(db.categories);
+    super(() => getDb().categories);
   }
 
   protected async toStored(

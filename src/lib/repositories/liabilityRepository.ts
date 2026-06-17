@@ -1,5 +1,5 @@
 import { decryptString, encryptString } from '@/lib/crypto';
-import { db } from '@/lib/db';
+import { getDb } from '@/lib/db';
 import type { StoredLiability } from '@/lib/db';
 import type { Liability } from '@/types/domain';
 
@@ -13,7 +13,7 @@ export type NewLiability = Pick<
 
 class LiabilityRepository extends SecureRepository<Liability, StoredLiability> {
   constructor() {
-    super(db.liabilities);
+    super(() => getDb().liabilities);
   }
 
   protected async toStored(

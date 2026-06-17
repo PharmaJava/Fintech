@@ -1,4 +1,4 @@
-import { db } from '@/lib/db';
+import { getDb } from '@/lib/db';
 import type { StoredRecurringRule } from '@/lib/db';
 import type { RecurringRule } from '@/types/domain';
 
@@ -15,7 +15,7 @@ class RecurringRuleRepository extends SecureRepository<
   StoredRecurringRule
 > {
   constructor() {
-    super(db.recurringRules);
+    super(() => getDb().recurringRules);
   }
 
   protected async toStored(
