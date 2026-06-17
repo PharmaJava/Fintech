@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import { AppLayout } from './layout/AppLayout';
+import { BudgetsPage } from './routes/BudgetsPage';
 import { DashboardPage } from './routes/DashboardPage';
 import { NetworthPage } from './routes/NetworthPage';
 import { SettingsPage } from './routes/SettingsPage';
@@ -18,6 +19,7 @@ export const router = createBrowserRouter(
         { index: true, element: <DashboardPage /> },
         { path: 'networth', element: <NetworthPage /> },
         { path: 'transactions', element: <TransactionsPage /> },
+        { path: 'budgets', element: <BudgetsPage /> },
         { path: 'settings', element: <SettingsPage /> },
         { path: '*', element: <Navigate to="/" replace /> },
       ],
