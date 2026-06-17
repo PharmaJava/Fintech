@@ -4,7 +4,8 @@ import { Outlet } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
 import { t } from '@/i18n';
-import { lock, resetInactivityTimer } from '@/lib/crypto';
+import { lock, resetInactivityTimer, setInactivityTimeout } from '@/lib/crypto';
+import { useSettingsStore } from '@/stores/settingsStore';
 import { useThemeStore } from '@/stores/themeStore';
 
 import { BottomNav } from './BottomNav';
@@ -18,6 +19,14 @@ import { Sidebar } from './Sidebar';
 export function AppLayout() {
   const theme = useThemeStore((state) => state.theme);
   const toggleTheme = useThemeStore((state) => state.toggle);
+  const inactivityMinutes = useSettingsStore(
+    (state) => state.inactivityMinutes,
+  );
+
+  // Aplica el tiempo de inactividad configurado (y re-arma el temporizador).
+  useEffect(() => {
+    setInactivityTimeout(inactivityMinutes * 60_000);
+  }, [inactivityMinutes]);
 
   // Reinicia el temporizador de inactividad ante actividad del usuario.
   useEffect(() => {

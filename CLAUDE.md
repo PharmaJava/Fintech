@@ -244,16 +244,18 @@ Requisitos: Node 22+, pnpm 10+.
 
 - **Fase 0** ✅ (HECHA): scaffold + repo + capa de almacenamiento cifrado +
   esqueleto navegable + deploy a GitHub Pages + `CLAUDE.md` + skills.
-- **Fase 1**: Patrimonio neto (CRUD activos/pasivos, valoraciones con histórico,
-  cálculo de patrimonio neto, curva de riqueza).
-- **Fase 2**: Transacciones + categorías + recurrentes + presupuestos + import/export CSV.
-- **Fase 3**: Seguridad completa (cambio de PIN, intentos, backup cifrado .zip AES).
+- **Fase 1** ✅: Patrimonio neto (CRUD activos/pasivos, valoraciones con
+  histórico, cálculo de patrimonio neto, curva de riqueza, donut por categoría).
+- **Fase 2** ✅: Transacciones + categorías + cuentas + recurrentes +
+  presupuestos + import/export CSV.
+- **Fase 3** ✅: Seguridad completa (cambio de PIN con re-cifrado, bloqueo por
+  intentos, inactividad configurable, backup cifrado AES).
 - **Fase 4**: Exportación Excel profesional (dashboard + fórmulas, una dirección).
 - **Fase 5**: Motor FIRE + simulador + FinScore (Monte Carlo en Web Workers).
 - **Fase 6**: Reglas automáticas, metas avanzadas, multi-perfil local.
 - **Fase 7** (posterior, aislada): Excel bidireccional con reconciliación.
 
-> **Estamos en**: **Fase 1 (Patrimonio neto)** en construcción.
+> **Estamos en**: Fases 1, 2 y 3 completas. Siguiente: **Fase 4 (Excel)**.
 
 Aviso a decidir más adelante: el "multi-dispositivo cifrado" choca con "100%
 local" (sync E2E peer-to-peer o se descarta).

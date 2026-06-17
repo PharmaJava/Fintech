@@ -12,6 +12,7 @@ import {
 import { t } from '@/i18n';
 
 import {
+  getLockRemainingMs,
   isPinConfigured,
   MIN_PIN_LENGTH,
   setupPin,
@@ -24,9 +25,15 @@ export function UnlockScreen() {
   const [pin, setPin] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [lockMs, setLockMs] = useState(0);
 
   useEffect(() => {
     void isPinConfigured().then(setConfigured);
+  }, []);
+
+  useEffect(() => {
+    const id = setInterval(() => setLockMs(getLockRemainingMs()), 500);
+    return () => clearInterval(id);
   }, []);
 
   const isCreating = configured === false;
@@ -47,7 +54,11 @@ export function UnlockScreen() {
       } else {
         const ok = await unlockWithPin(pin);
         if (!ok) {
-          setError(t('unlock.error.wrong'));
+          setError(
+            getLockRemainingMs() > 0
+              ? t('security.locked')
+              : t('unlock.error.wrong'),
+          );
           setPin('');
         }
       }
@@ -87,7 +98,7 @@ export function UnlockScreen() {
               onChange={(e) => setPin(e.target.value)}
               placeholder={t('unlock.pin.placeholder')}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              disabled={configured === null || busy}
+              disabled={configured === null || busy || lockMs > 0}
             />
             {error !== null && (
               <p className="text-sm text-destructive">{error}</p>
@@ -95,7 +106,7 @@ export function UnlockScreen() {
             <Button
               type="submit"
               className="w-full"
-              disabled={configured === null || busy}
+              disabled={configured === null || busy || lockMs > 0}
             >
               {isCreating
                 ? t('unlock.submit.create')

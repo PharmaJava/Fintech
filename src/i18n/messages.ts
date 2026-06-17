@@ -134,6 +134,26 @@ export const messages = {
     'settings.title': 'Ajustes',
     'settings.privacy':
       'Todos tus datos se quedan en este dispositivo, cifrados. Sin nube.',
+
+    'security.title': 'Seguridad',
+    'security.changePin': 'Cambiar PIN',
+    'security.currentPin': 'PIN actual',
+    'security.newPin': 'PIN nuevo',
+    'security.confirmPin': 'Repite el PIN nuevo',
+    'security.pinChanged': 'PIN actualizado correctamente.',
+    'security.pinWrong': 'El PIN actual no es correcto.',
+    'security.pinMismatch': 'Los PIN nuevos no coinciden.',
+    'security.inactivity': 'Bloqueo por inactividad',
+    'security.minutes': 'minutos',
+    'security.locked': 'Demasiados intentos. Espera unos segundos.',
+
+    'backup.title': 'Copia de seguridad cifrada',
+    'backup.password': 'Contrasena del backup',
+    'backup.export': 'Crear copia',
+    'backup.import': 'Restaurar copia',
+    'backup.restored': 'Copia restaurada correctamente.',
+    'backup.help':
+      'La copia va cifrada con una contrasena propia (minimo 6). Guardala bien: sin ella no se puede restaurar. Restaurar reemplaza tus datos actuales.',
   },
 } as const;
 
