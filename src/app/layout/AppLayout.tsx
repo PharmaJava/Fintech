@@ -3,13 +3,18 @@ import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
-import { lock, resetInactivityTimer } from '@/lib/crypto';
 import { t } from '@/i18n';
+import { lock, resetInactivityTimer } from '@/lib/crypto';
 import { useThemeStore } from '@/stores/themeStore';
 
+import { BottomNav } from './BottomNav';
 import { Sidebar } from './Sidebar';
 
-/** Layout principal: cabecera + barra lateral + contenido (Outlet). */
+/**
+ * Layout principal (mobile-first):
+ * - Movil: cabecera + contenido + navegacion inferior (BottomNav).
+ * - Escritorio (md+): cabecera + barra lateral (Sidebar) + contenido.
+ */
 export function AppLayout() {
   const theme = useThemeStore((state) => state.theme);
   const toggleTheme = useThemeStore((state) => state.toggle);
@@ -30,7 +35,7 @@ export function AppLayout() {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <header className="flex items-center justify-between border-b px-4 py-3">
+      <header className="sticky top-0 z-20 flex items-center justify-between border-b bg-background/95 px-4 py-3 backdrop-blur">
         <span className="text-lg font-semibold tracking-tight">
           {t('app.name')}
         </span>
@@ -59,13 +64,15 @@ export function AppLayout() {
       </header>
 
       <div className="flex flex-1">
-        <aside className="w-56 shrink-0 border-r">
+        <aside className="hidden w-56 shrink-0 border-r md:block">
           <Sidebar />
         </aside>
-        <main className="flex-1 p-6">
+        <main className="mx-auto w-full max-w-3xl flex-1 p-4 sm:p-6">
           <Outlet />
         </main>
       </div>
+
+      <BottomNav />
     </div>
   );
 }

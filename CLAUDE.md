@@ -48,6 +48,11 @@ build: por eso se usan **solo APIs web estándar** (IndexedDB, Web Crypto…).
    (`lib/repositories`). Los componentes y stores NUNCA tocan Dexie directamente.
 7. **Las fechas se guardan en ISO 8601 UTC**; el formateo local se hace en UI.
 8. **TypeScript estricto**: prohibido `any`. Usa `unknown` + validación.
+9. **Mobile-first y responsive**: el grueso de usuarios/clientes usa móvil, así
+   que se diseña **primero para móvil** y se escala hacia tablet/escritorio. Toda
+   pantalla debe ser usable y cómoda en móvil (objetivos táctiles ≥ 40px,
+   navegación inferior en móvil, sin scroll horizontal). Funciona bien en todas
+   las plataformas, **especialmente en móvil**.
 
 ---
 
@@ -162,6 +167,9 @@ hay **PIN maestro + bloqueo por inactividad**; WebAuthn queda como mejora futura
 - Componentes pequeños; **lógica de datos fuera de los componentes**.
 - Comentarios y documentación de usuario en español; código en inglés.
 - `crypto.randomUUID()` para ids; `new Date().toISOString()` para fechas.
+- **UI mobile-first**: estilos base para móvil y se amplían con breakpoints de
+  Tailwind (`sm:`, `md:`, `lg:`). Navegación inferior en móvil y barra lateral en
+  escritorio (`AppLayout`). Nada de scroll horizontal; objetivos táctiles ≥ 40px.
 
 ---
 
@@ -245,7 +253,7 @@ Requisitos: Node 22+, pnpm 10+.
 - **Fase 6**: Reglas automáticas, metas avanzadas, multi-perfil local.
 - **Fase 7** (posterior, aislada): Excel bidireccional con reconciliación.
 
-> **Estamos en**: fin de **Fase 0**. Siguiente: **Fase 1 (Patrimonio neto)**.
+> **Estamos en**: **Fase 1 (Patrimonio neto)** en construcción.
 
 Aviso a decidir más adelante: el "multi-dispositivo cifrado" choca con "100%
 local" (sync E2E peer-to-peer o se descarta).
@@ -261,6 +269,7 @@ local" (sync E2E peer-to-peer o se descarta).
 - ❌ No introducir dependencias pesadas sin justificarlo.
 - ❌ No usar APIs no estándar que rompan la portabilidad web → escritorio.
 - ❌ No loggear ni persistir datos sensibles en claro.
+- ❌ No diseñar solo para escritorio: mobile-first siempre (móvil es prioridad).
 
 ---
 

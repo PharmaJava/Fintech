@@ -1,25 +1,11 @@
-import { LayoutDashboard, Receipt, Settings, Wallet } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
-import { cn } from '@/lib/utils';
 import { t } from '@/i18n';
-import type { MessageKey } from '@/i18n';
+import { cn } from '@/lib/utils';
 
-interface NavItem {
-  to: string;
-  labelKey: MessageKey;
-  icon: typeof LayoutDashboard;
-  end?: boolean;
-}
+import { NAV_ITEMS } from './navItems';
 
-const NAV_ITEMS: NavItem[] = [
-  { to: '/', labelKey: 'nav.dashboard', icon: LayoutDashboard, end: true },
-  { to: '/networth', labelKey: 'nav.networth', icon: Wallet },
-  { to: '/transactions', labelKey: 'nav.transactions', icon: Receipt },
-  { to: '/settings', labelKey: 'nav.settings', icon: Settings },
-];
-
-/** Navegacion lateral principal. */
+/** Navegacion lateral (solo escritorio, md+). */
 export function Sidebar() {
   return (
     <nav className="flex flex-col gap-1 p-3">
