@@ -7,6 +7,7 @@ import { CategoriesManager } from '@/features/categories/CategoriesManager';
 import { ExcelExport } from '@/features/excel/ExcelExport';
 import { SecuritySettings } from '@/features/security/SecuritySettings';
 import { CsvTools } from '@/features/transactions/CsvTools';
+import { RulesManager } from '@/features/transactions/RulesManager';
 import { t } from '@/i18n';
 import { useFinanceStore } from '@/stores/financeStore';
 
@@ -23,6 +24,7 @@ export function SettingsPage() {
       <SecuritySettings />
       <AccountsManager />
       <CategoriesManager />
+      <RulesManager />
       <CsvTools />
       <ExcelExport />
       <Card>

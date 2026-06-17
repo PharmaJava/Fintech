@@ -8,11 +8,13 @@
 import { format } from 'date-fns';
 import { create } from 'zustand';
 
+import { matchCategory } from '@/features/transactions/autorules';
 import { dueOccurrences } from '@/features/transactions/recurring';
 import type { CsvImportRow } from '@/features/transactions/csv';
 import { toCents } from '@/lib/money';
 import {
   accountRepository,
+  autoRuleRepository,
   budgetRepository,
   categoryRepository,
   recurringRuleRepository,
@@ -21,6 +23,7 @@ import {
 import type {
   Account,
   AccountType,
+  AutoRule,
   Budget,
   Category,
   CategoryKind,
@@ -70,6 +73,7 @@ interface FinanceState {
   transactions: Transaction[];
   budgets: Budget[];
   recurringRules: RecurringRule[];
+  autoRules: AutoRule[];
   loaded: boolean;
 
   load: () => Promise<void>;
@@ -100,6 +104,10 @@ interface FinanceState {
   materializeDueRecurring: () => Promise<number>;
 
   importTransactions: (rows: readonly CsvImportRow[]) => Promise<number>;
+
+  addAutoRule: (keyword: string, categoryId: string) => Promise<void>;
+  deleteAutoRule: (id: string) => Promise<void>;
+  applyAutoRulesToExisting: () => Promise<number>;
 }
 
 export const useFinanceStore = create<FinanceState>((set, get) => ({
@@ -108,23 +116,32 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   transactions: [],
   budgets: [],
   recurringRules: [],
+  autoRules: [],
   loaded: false,
 
   load: async () => {
-    const [accounts, categories, transactions, budgets, recurringRules] =
-      await Promise.all([
-        accountRepository.getAll(),
-        categoryRepository.getAll(),
-        transactionRepository.getAll(),
-        budgetRepository.getAll(),
-        recurringRuleRepository.getAll(),
-      ]);
+    const [
+      accounts,
+      categories,
+      transactions,
+      budgets,
+      recurringRules,
+      autoRules,
+    ] = await Promise.all([
+      accountRepository.getAll(),
+      categoryRepository.getAll(),
+      transactionRepository.getAll(),
+      budgetRepository.getAll(),
+      recurringRuleRepository.getAll(),
+      autoRuleRepository.getAll(),
+    ]);
     set({
       accounts,
       categories,
       transactions,
       budgets,
       recurringRules,
+      autoRules,
       loaded: true,
     });
   },
@@ -269,6 +286,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       return category.id;
     };
 
+    const rules = get().autoRules;
     let created = 0;
     for (const row of rows) {
       const accountId = await resolveAccount(row.account);
@@ -276,11 +294,13 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
         row.category,
         row.type === 'income' ? 'income' : 'expense',
       );
+      // Una regla automatica sobre la nota tiene prioridad en la categoria.
+      const finalCategory = matchCategory(row.note, rules) ?? categoryId;
       await transactionRepository.add({
         type: row.type,
         amount: toCents(row.amount),
         accountId,
-        categoryId,
+        categoryId: finalCategory,
         date: row.date,
         note: row.note,
         tags: row.tags === '' ? [] : row.tags.split(';'),
@@ -290,5 +310,32 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
 
     await get().load();
     return created;
+  },
+
+  addAutoRule: async (keyword, categoryId) => {
+    await autoRuleRepository.add({ keyword, categoryId });
+    set({ autoRules: await autoRuleRepository.getAll() });
+  },
+
+  deleteAutoRule: async (id) => {
+    await autoRuleRepository.delete(id);
+    set({ autoRules: await autoRuleRepository.getAll() });
+  },
+
+  /** Re-categoriza los movimientos existentes segun las reglas; devuelve cuantos cambiaron. */
+  applyAutoRulesToExisting: async () => {
+    const rules = get().autoRules;
+    let changed = 0;
+    for (const txn of get().transactions) {
+      const target = matchCategory(txn.note, rules);
+      if (target && target !== txn.categoryId) {
+        await transactionRepository.put({ ...txn, categoryId: target });
+        changed += 1;
+      }
+    }
+    if (changed > 0) {
+      set({ transactions: await transactionRepository.getAll() });
+    }
+    return changed;
   },
 }));

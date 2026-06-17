@@ -9,6 +9,8 @@ export {
   type NewTransaction,
 } from './transactionRepository';
 export { budgetRepository, type NewBudget } from './budgetRepository';
+export { goalRepository, type NewGoal } from './goalRepository';
+export { autoRuleRepository, type NewAutoRule } from './autoRuleRepository';
 export {
   recurringRuleRepository,
   type NewRecurringRule,

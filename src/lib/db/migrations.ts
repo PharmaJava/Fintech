@@ -13,7 +13,7 @@
 import type { Dexie, Transaction } from 'dexie';
 
 /** Version actual del esquema de datos. */
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 interface SchemaVersion {
   version: number;
@@ -36,6 +36,13 @@ export const SCHEMA_VERSIONS: readonly SchemaVersion[] = [
       budgets: 'id, categoryId, month, [categoryId+month]',
       goals: 'id, targetDate',
       appMeta: 'id',
+    },
+  },
+  {
+    // v2: reglas de auto-categorizacion (Fase 6).
+    version: 2,
+    stores: {
+      autoRules: 'id, categoryId',
     },
   },
 ];

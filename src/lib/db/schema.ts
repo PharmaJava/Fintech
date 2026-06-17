@@ -92,6 +92,12 @@ export interface StoredGoal {
   current: EncryptedValue;
 }
 
+export interface StoredAutoRule {
+  id: string;
+  categoryId: string;
+  keyword: EncryptedValue;
+}
+
 /** Metadatos de la app: salt de cifrado, verificador de PIN, version de esquema. */
 export interface AppMeta {
   /** Clave fija; solo hay un registro. */

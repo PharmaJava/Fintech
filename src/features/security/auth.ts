@@ -21,8 +21,10 @@ import { db, SCHEMA_VERSION } from '@/lib/db';
 import {
   accountRepository,
   assetRepository,
+  autoRuleRepository,
   budgetRepository,
   categoryRepository,
+  goalRepository,
   liabilityRepository,
   recurringRuleRepository,
   transactionRepository,
@@ -123,6 +125,8 @@ export const changePin = async (
     categories,
     budgets,
     recurringRules,
+    goals,
+    autoRules,
   ] = await Promise.all([
     accountRepository.getAll(),
     assetRepository.getAll(),
@@ -132,6 +136,8 @@ export const changePin = async (
     categoryRepository.getAll(),
     budgetRepository.getAll(),
     recurringRuleRepository.getAll(),
+    goalRepository.getAll(),
+    autoRuleRepository.getAll(),
   ]);
 
   // Derivar clave nueva y activarla.
@@ -151,6 +157,8 @@ export const changePin = async (
     ...categories.map((x) => categoryRepository.put(x)),
     ...budgets.map((x) => budgetRepository.put(x)),
     ...recurringRules.map((x) => recurringRuleRepository.put(x)),
+    ...goals.map((x) => goalRepository.put(x)),
+    ...autoRules.map((x) => autoRuleRepository.put(x)),
   ]);
 
   await db.appMeta.put({

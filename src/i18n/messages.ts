@@ -159,6 +159,36 @@ export const messages = {
     'finscore.emergency': 'Colchon (meses)',
     'finscore.debt': 'Deuda/activos',
 
+    'goals.title': 'Metas de ahorro',
+    'goals.add': 'Nueva meta',
+    'goals.empty': 'Crea metas de ahorro y sigue tu progreso.',
+    'goals.name': 'Nombre de la meta',
+    'goals.target': 'Objetivo (€)',
+    'goals.targetDate': 'Fecha objetivo (opcional)',
+    'goals.contribute': 'Aportar',
+    'goals.contributeAmount': 'Cantidad a aportar (€)',
+    'goals.reached': 'Conseguida',
+
+    'rules.title': 'Reglas automaticas',
+    'rules.subtitle':
+      'Auto-categoriza movimientos cuya nota contenga un texto.',
+    'rules.add': 'Anadir regla',
+    'rules.empty': 'Sin reglas. Crea una para categorizar automaticamente.',
+    'rules.keyword': 'Si la nota contiene…',
+    'rules.category': 'Asignar categoria',
+    'rules.apply': 'Aplicar a movimientos existentes',
+    'rules.applied': 'movimientos recategorizados',
+
+    'profiles.title': 'Perfiles',
+    'profiles.subtitle':
+      'Varios perfiles locales, cada uno con su PIN y cifrado.',
+    'profiles.active': 'Activo',
+    'profiles.add': 'Nuevo perfil',
+    'profiles.switch': 'Cambiar',
+    'profiles.name': 'Nombre del perfil',
+    'profiles.select': 'Elige un perfil',
+    'profiles.locked': 'Bloqueado',
+
     'excel.title': 'Exportar a Excel',
     'excel.export': 'Descargar Excel (.xlsx)',
     'excel.help':

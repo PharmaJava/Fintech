@@ -116,3 +116,10 @@ export interface Goal {
   current: Cents;
   targetDate?: string;
 }
+
+/** Regla de auto-categorizacion: si la nota contiene `keyword`, asigna `categoryId`. (* keyword sensible) */
+export interface AutoRule {
+  id: string;
+  keyword: string;
+  categoryId: string;
+}

@@ -11,6 +11,7 @@ import type {
   AppMeta,
   StoredAccount,
   StoredAsset,
+  StoredAutoRule,
   StoredBudget,
   StoredCategory,
   StoredGoal,
@@ -30,6 +31,7 @@ export class PatrimonioDB extends Dexie {
   recurringRules!: EntityTable<StoredRecurringRule, 'id'>;
   budgets!: EntityTable<StoredBudget, 'id'>;
   goals!: EntityTable<StoredGoal, 'id'>;
+  autoRules!: EntityTable<StoredAutoRule, 'id'>;
   appMeta!: EntityTable<AppMeta, 'id'>;
 
   constructor() {
