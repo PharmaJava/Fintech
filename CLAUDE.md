@@ -252,11 +252,13 @@ Requisitos: Node 22+, pnpm 10+.
   intentos, inactividad configurable, backup cifrado AES).
 - **Fase 4** ✅: Exportación Excel profesional (Resumen + Patrimonio +
   Movimientos + Presupuestos con fórmulas; ExcelJS lazy; una dirección).
-- **Fase 5**: Motor FIRE + simulador + FinScore (Monte Carlo en Web Workers).
+- **Fase 5** ✅: Motor FIRE (FI number, años hasta FI, proyección) + simulador
+  Monte Carlo en Web Worker + FinScore (salud financiera 0-100).
 - **Fase 6**: Reglas automáticas, metas avanzadas, multi-perfil local.
 - **Fase 7** (posterior, aislada): Excel bidireccional con reconciliación.
 
-> **Estamos en**: Fases 1-4 completas. Siguiente: **Fase 5 (FIRE + FinScore)**.
+> **Estamos en**: Fases 1-5 completas. Pendiente: Fase 6 (reglas automáticas,
+> metas avanzadas, multi-perfil) y Fase 7 (Excel bidireccional, aislada).
 
 Aviso a decidir más adelante: el "multi-dispositivo cifrado" choca con "100%
 local" (sync E2E peer-to-peer o se descarta).

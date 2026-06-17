@@ -19,15 +19,17 @@ export function BottomNav() {
           end={end ?? false}
           className={({ isActive }) =>
             cn(
-              'flex flex-1 flex-col items-center gap-1 py-2 text-xs font-medium transition-colors',
+              'flex min-w-0 flex-1 flex-col items-center gap-1 px-0.5 py-2 text-[10px] font-medium transition-colors',
               isActive
                 ? 'text-primary'
                 : 'text-muted-foreground hover:text-foreground',
             )
           }
         >
-          <Icon className="size-5" />
-          <span className="leading-none">{t(labelKey)}</span>
+          <Icon className="size-5 shrink-0" />
+          <span className="w-full truncate text-center leading-none">
+            {t(labelKey)}
+          </span>
         </NavLink>
       ))}
     </nav>

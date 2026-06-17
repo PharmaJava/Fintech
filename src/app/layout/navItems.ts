@@ -1,4 +1,5 @@
 import {
+  Flame,
   LayoutDashboard,
   PiggyBank,
   Receipt,
@@ -21,5 +22,6 @@ export const NAV_ITEMS: NavItem[] = [
   { to: '/networth', labelKey: 'nav.networth', icon: Wallet },
   { to: '/transactions', labelKey: 'nav.transactions', icon: Receipt },
   { to: '/budgets', labelKey: 'nav.budgets', icon: PiggyBank },
+  { to: '/fire', labelKey: 'nav.fire', icon: Flame },
   { to: '/settings', labelKey: 'nav.settings', icon: Settings },
 ];

@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AppLayout } from './layout/AppLayout';
 import { BudgetsPage } from './routes/BudgetsPage';
 import { DashboardPage } from './routes/DashboardPage';
+import { FirePage } from './routes/FirePage';
 import { NetworthPage } from './routes/NetworthPage';
 import { SettingsPage } from './routes/SettingsPage';
 import { TransactionsPage } from './routes/TransactionsPage';
@@ -20,6 +21,7 @@ export const router = createBrowserRouter(
         { path: 'networth', element: <NetworthPage /> },
         { path: 'transactions', element: <TransactionsPage /> },
         { path: 'budgets', element: <BudgetsPage /> },
+        { path: 'fire', element: <FirePage /> },
         { path: 'settings', element: <SettingsPage /> },
         { path: '*', element: <Navigate to="/" replace /> },
       ],
