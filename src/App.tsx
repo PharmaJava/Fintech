@@ -1,21 +1,22 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { RouterProvider } from 'react-router-dom';
+
+import { router } from '@/app/router';
+import { ThemeProvider } from '@/app/providers';
+import { UnlockScreen } from '@/features/security/UnlockScreen';
+import { useIsUnlocked } from '@/features/security/useSession';
 
 /**
- * Placeholder de la Fase 0 (esqueleto). El router, el layout navegable y la
- * pantalla de desbloqueo se montan en el bloque 8.2.
+ * Raiz de la app: aplica el tema y decide entre la pantalla de desbloqueo
+ * (bloqueada) y la app navegable (desbloqueada). El cifrado y los datos solo
+ * son accesibles tras introducir el PIN.
  */
 function App() {
+  const unlocked = useIsUnlocked();
+
   return (
-    <main className="flex min-h-dvh items-center justify-center p-6">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Patrimonio</CardTitle>
-        </CardHeader>
-        <CardContent className="text-muted-foreground">
-          Esqueleto de la Fase 0. Tu patrimonio, privado y en tu dispositivo.
-        </CardContent>
-      </Card>
-    </main>
+    <ThemeProvider>
+      {unlocked ? <RouterProvider router={router} /> : <UnlockScreen />}
+    </ThemeProvider>
   );
 }
 
