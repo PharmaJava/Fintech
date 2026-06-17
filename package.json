@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "description": "PWA local-first, cifrada y sin nube para controlar tu patrimonio neto real",
+  "packageManager": "pnpm@10.33.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

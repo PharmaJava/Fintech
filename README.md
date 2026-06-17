@@ -1,5 +1,8 @@
 # Patrimonio
 
+🌐 **App en vivo:** https://pharmajava.github.io/Fintech/ (se publica sola en
+cada cambio a `main` mediante GitHub Actions).
+
 PWA **local-first**, cifrada y **sin nube** cuyo corazón es el **patrimonio neto
 real** (no es una app de gastos más). Combina control total del patrimonio
 (líquido, invertido, inmuebles, vehículos, otros activos y pasivos, con
