@@ -21,6 +21,13 @@ const AES_KEY_BITS = 256;
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
 
+/**
+ * Codifica UTF-8 a un `Uint8Array` respaldado por `ArrayBuffer` (no
+ * `SharedArrayBuffer`), requisito de `BufferSource` en los tipos DOM actuales.
+ */
+const encodeUtf8 = (value: string): Uint8Array<ArrayBuffer> =>
+  new Uint8Array(textEncoder.encode(value));
+
 /** Valor cifrado listo para persistir: IV + ciphertext, ambos en base64. */
 export interface EncryptedValue {
   /** Vector de inicializacion (base64), unico por valor. */
@@ -37,7 +44,7 @@ const toBase64 = (bytes: Uint8Array): string => {
   return btoa(binary);
 };
 
-const fromBase64 = (value: string): Uint8Array => {
+const fromBase64 = (value: string): Uint8Array<ArrayBuffer> => {
   const binary = atob(value);
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i += 1) {
@@ -47,14 +54,15 @@ const fromBase64 = (value: string): Uint8Array => {
 };
 
 /** Genera un salt aleatorio nuevo (unico por instalacion). */
-export const generateSalt = (): Uint8Array =>
+export const generateSalt = (): Uint8Array<ArrayBuffer> =>
   globalThis.crypto.getRandomValues(new Uint8Array(SALT_BYTES));
 
 /** Serializa un salt a base64 para guardarlo en `AppMeta`. */
 export const saltToBase64 = (salt: Uint8Array): string => toBase64(salt);
 
 /** Recupera un salt desde base64. */
-export const saltFromBase64 = (value: string): Uint8Array => fromBase64(value);
+export const saltFromBase64 = (value: string): Uint8Array<ArrayBuffer> =>
+  fromBase64(value);
 
 /**
  * Deriva una clave AES-GCM de 256 bits a partir de una passphrase y un salt.
@@ -62,12 +70,12 @@ export const saltFromBase64 = (value: string): Uint8Array => fromBase64(value);
  */
 export const deriveKey = async (
   passphrase: string,
-  salt: Uint8Array,
+  salt: Uint8Array<ArrayBuffer>,
   iterations: number = PBKDF2_ITERATIONS,
 ): Promise<CryptoKey> => {
   const baseKey = await subtle.importKey(
     'raw',
-    textEncoder.encode(passphrase),
+    encodeUtf8(passphrase),
     'PBKDF2',
     false,
     ['deriveKey'],
@@ -91,7 +99,7 @@ export const encryptString = async (
   const ciphertext = await subtle.encrypt(
     { name: 'AES-GCM', iv },
     key,
-    textEncoder.encode(plaintext),
+    encodeUtf8(plaintext),
   );
   return { iv: toBase64(iv), ct: toBase64(new Uint8Array(ciphertext)) };
 };

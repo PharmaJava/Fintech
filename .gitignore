@@ -44,3 +44,6 @@ Thumbs.db
 *.xls
 *.csv
 backups/
+
+# TypeScript incremental build info
+*.tsbuildinfo
