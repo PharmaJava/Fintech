@@ -8,6 +8,8 @@ import { useNetworthStore } from '@/stores/networthStore';
 
 import { AddLiabilityDialog } from './AddLiabilityDialog';
 import { AddValuationDialog } from './AddValuationDialog';
+import { EditLiabilityDialog } from './EditLiabilityDialog';
+import { ValuationHistoryDialog } from './ValuationHistoryDialog';
 import { liabilityValue } from './networth';
 
 /** Lista de pasivos con su importe actual, nueva valoracion y borrado. */
@@ -46,6 +48,12 @@ export function LiabilitiesCard() {
                     refId={liability.id}
                     label={liability.name}
                   />
+                  <ValuationHistoryDialog
+                    refType="liability"
+                    refId={liability.id}
+                    label={liability.name}
+                  />
+                  <EditLiabilityDialog liability={liability} />
                   <Button
                     size="icon"
                     variant="ghost"

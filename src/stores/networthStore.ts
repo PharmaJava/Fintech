@@ -2,8 +2,8 @@
  * stores/networthStore — estado de la feature de patrimonio neto.
  *
  * Carga activos, pasivos y valoraciones (vía repositorios; nunca toca Dexie) y
- * expone acciones de creación/borrado. El cálculo del patrimonio vive en
- * `features/networth/networth.ts` (puro y testeado).
+ * expone acciones de creación/edición/borrado. El cálculo del patrimonio vive
+ * en `features/networth/networth.ts` (puro y testeado).
  */
 import { format } from 'date-fns';
 import { create } from 'zustand';
@@ -15,8 +15,8 @@ import {
   valuationRepository,
 } from '@/lib/repositories';
 import type {
-  AssetCategory,
   Asset,
+  AssetCategory,
   Liability,
   Valuation,
 } from '@/types/domain';
@@ -42,13 +42,22 @@ interface NetworthState {
   loaded: boolean;
   load: () => Promise<void>;
   addAsset: (input: AddAssetInput) => Promise<void>;
+  updateAsset: (
+    id: string,
+    patch: { name: string; category: AssetCategory },
+  ) => Promise<void>;
   addLiability: (input: AddLiabilityInput) => Promise<void>;
+  updateLiability: (
+    id: string,
+    patch: { name: string; interestRatePercent?: number },
+  ) => Promise<void>;
   addValuation: (
     refType: Valuation['refType'],
     refId: string,
     value: number,
     date: string,
   ) => Promise<void>;
+  deleteValuation: (id: string) => Promise<void>;
   deleteAsset: (id: string) => Promise<void>;
   deleteLiability: (id: string) => Promise<void>;
 }
@@ -83,10 +92,33 @@ export const useNetworthStore = create<NetworthState>((set, get) => ({
     await get().load();
   },
 
+  updateAsset: async (id, patch) => {
+    const existing = get().assets.find((a) => a.id === id);
+    if (!existing) return;
+    await assetRepository.put({ ...existing, ...patch });
+    await get().load();
+  },
+
   addLiability: async ({ name, principal, interestRatePercent }) => {
     await liabilityRepository.add({
       name,
       principal: toCents(principal),
+      ...(interestRatePercent !== undefined
+        ? { interestRate: interestRatePercent / 100 }
+        : {}),
+    });
+    await get().load();
+  },
+
+  updateLiability: async (id, patch) => {
+    const existing = get().liabilities.find((l) => l.id === id);
+    if (!existing) return;
+    const { interestRatePercent, name } = patch;
+    await liabilityRepository.put({
+      id: existing.id,
+      createdAt: existing.createdAt,
+      principal: existing.principal,
+      name,
       ...(interestRatePercent !== undefined
         ? { interestRate: interestRatePercent / 100 }
         : {}),
@@ -101,6 +133,11 @@ export const useNetworthStore = create<NetworthState>((set, get) => ({
       value: toCents(value),
       date,
     });
+    await get().load();
+  },
+
+  deleteValuation: async (id) => {
+    await valuationRepository.delete(id);
     await get().load();
   },
 

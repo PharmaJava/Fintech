@@ -8,6 +8,8 @@ import { useNetworthStore } from '@/stores/networthStore';
 
 import { AddAssetDialog } from './AddAssetDialog';
 import { AddValuationDialog } from './AddValuationDialog';
+import { EditAssetDialog } from './EditAssetDialog';
+import { ValuationHistoryDialog } from './ValuationHistoryDialog';
 import { assetValue } from './networth';
 import { categoryLabel } from './labels';
 
@@ -52,6 +54,12 @@ export function AssetsCard() {
                     refId={asset.id}
                     label={asset.name}
                   />
+                  <ValuationHistoryDialog
+                    refType="asset"
+                    refId={asset.id}
+                    label={asset.name}
+                  />
+                  <EditAssetDialog asset={asset} />
                   <Button
                     size="icon"
                     variant="ghost"
