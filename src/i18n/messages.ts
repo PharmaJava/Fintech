@@ -125,6 +125,12 @@ export const messages = {
     'csv.help':
       'Solo exportacion e importacion CSV. El Excel profesional llega en la Fase 4.',
 
+    'excel.title': 'Exportar a Excel',
+    'excel.export': 'Descargar Excel (.xlsx)',
+    'excel.help':
+      'Genera un libro con Resumen, Patrimonio, Movimientos y Presupuestos (con formulas). Solo exportacion.',
+    'excel.generating': 'Generando…',
+
     'common.save': 'Guardar',
     'common.cancel': 'Cancelar',
     'common.delete': 'Eliminar',

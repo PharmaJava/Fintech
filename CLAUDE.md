@@ -250,12 +250,13 @@ Requisitos: Node 22+, pnpm 10+.
   presupuestos + import/export CSV.
 - **Fase 3** ✅: Seguridad completa (cambio de PIN con re-cifrado, bloqueo por
   intentos, inactividad configurable, backup cifrado AES).
-- **Fase 4**: Exportación Excel profesional (dashboard + fórmulas, una dirección).
+- **Fase 4** ✅: Exportación Excel profesional (Resumen + Patrimonio +
+  Movimientos + Presupuestos con fórmulas; ExcelJS lazy; una dirección).
 - **Fase 5**: Motor FIRE + simulador + FinScore (Monte Carlo en Web Workers).
 - **Fase 6**: Reglas automáticas, metas avanzadas, multi-perfil local.
 - **Fase 7** (posterior, aislada): Excel bidireccional con reconciliación.
 
-> **Estamos en**: Fases 1, 2 y 3 completas. Siguiente: **Fase 4 (Excel)**.
+> **Estamos en**: Fases 1-4 completas. Siguiente: **Fase 5 (FIRE + FinScore)**.
 
 Aviso a decidir más adelante: el "multi-dispositivo cifrado" choca con "100%
 local" (sync E2E peer-to-peer o se descarta).

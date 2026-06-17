@@ -28,12 +28,24 @@ export function UnlockScreen() {
   const [lockMs, setLockMs] = useState(0);
 
   useEffect(() => {
-    void isPinConfigured().then(setConfigured);
+    let active = true;
+    void isPinConfigured().then((value) => {
+      if (active) setConfigured(value);
+    });
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
-    const id = setInterval(() => setLockMs(getLockRemainingMs()), 500);
-    return () => clearInterval(id);
+    let active = true;
+    const id = setInterval(() => {
+      if (active) setLockMs(getLockRemainingMs());
+    }, 500);
+    return () => {
+      active = false;
+      clearInterval(id);
+    };
   }, []);
 
   const isCreating = configured === false;

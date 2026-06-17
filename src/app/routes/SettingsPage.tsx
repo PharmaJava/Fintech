@@ -4,6 +4,7 @@ import { PageHeader } from '@/components/shared/PageHeader';
 import { Card, CardContent } from '@/components/ui/card';
 import { AccountsManager } from '@/features/accounts/AccountsManager';
 import { CategoriesManager } from '@/features/categories/CategoriesManager';
+import { ExcelExport } from '@/features/excel/ExcelExport';
 import { SecuritySettings } from '@/features/security/SecuritySettings';
 import { CsvTools } from '@/features/transactions/CsvTools';
 import { t } from '@/i18n';
@@ -23,6 +24,7 @@ export function SettingsPage() {
       <AccountsManager />
       <CategoriesManager />
       <CsvTools />
+      <ExcelExport />
       <Card>
         <CardContent className="p-4 text-sm text-muted-foreground">
           {t('settings.privacy')}
