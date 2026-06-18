@@ -11,6 +11,7 @@ import type {
   AccountType,
   AssetCategory,
   CategoryKind,
+  EventKind,
   RecurringFrequency,
   RefType,
   TransactionType,
@@ -96,6 +97,15 @@ export interface StoredAutoRule {
   id: string;
   categoryId: string;
   keyword: EncryptedValue;
+}
+
+export interface StoredFinancialEvent {
+  id: string;
+  date: string;
+  kind: EventKind;
+  createdAt: string;
+  title: EncryptedValue;
+  note?: EncryptedValue;
 }
 
 /** Metadatos de la app: salt de cifrado, verificador de PIN, version de esquema. */

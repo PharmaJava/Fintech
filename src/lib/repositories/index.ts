@@ -12,6 +12,10 @@ export { budgetRepository, type NewBudget } from './budgetRepository';
 export { goalRepository, type NewGoal } from './goalRepository';
 export { autoRuleRepository, type NewAutoRule } from './autoRuleRepository';
 export {
+  financialEventRepository,
+  type NewFinancialEvent,
+} from './financialEventRepository';
+export {
   recurringRuleRepository,
   type NewRecurringRule,
 } from './recurringRuleRepository';

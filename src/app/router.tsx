@@ -10,6 +10,7 @@ import { DashboardPage } from './routes/DashboardPage';
 import { FirePage } from './routes/FirePage';
 import { NetworthPage } from './routes/NetworthPage';
 import { SettingsPage } from './routes/SettingsPage';
+import { TimelinePage } from '@/features/timeline/TimelinePage';
 import { TransactionsPage } from './routes/TransactionsPage';
 
 // La app vive bajo /Fintech/ en GitHub Pages; en dev bajo /.
@@ -34,6 +35,7 @@ export const router = createBrowserRouter(
       children: [
         { index: true, element: <DashboardPage /> },
         { path: 'networth', element: <NetworthPage /> },
+        { path: 'timeline', element: <TimelinePage /> },
         { path: 'transactions', element: <TransactionsPage /> },
         { path: 'budgets', element: <BudgetsPage /> },
         { path: 'fire', element: <FirePage /> },

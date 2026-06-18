@@ -24,6 +24,7 @@ import {
   autoRuleRepository,
   budgetRepository,
   categoryRepository,
+  financialEventRepository,
   goalRepository,
   liabilityRepository,
   recurringRuleRepository,
@@ -127,6 +128,7 @@ export const changePin = async (
     recurringRules,
     goals,
     autoRules,
+    events,
   ] = await Promise.all([
     accountRepository.getAll(),
     assetRepository.getAll(),
@@ -138,6 +140,7 @@ export const changePin = async (
     recurringRuleRepository.getAll(),
     goalRepository.getAll(),
     autoRuleRepository.getAll(),
+    financialEventRepository.getAll(),
   ]);
 
   // Derivar clave nueva y activarla.
@@ -159,6 +162,7 @@ export const changePin = async (
     ...recurringRules.map((x) => recurringRuleRepository.put(x)),
     ...goals.map((x) => goalRepository.put(x)),
     ...autoRules.map((x) => autoRuleRepository.put(x)),
+    ...events.map((x) => financialEventRepository.put(x)),
   ]);
 
   await getDb().appMeta.put({
