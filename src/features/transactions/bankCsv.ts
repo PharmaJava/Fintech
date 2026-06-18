@@ -95,14 +95,38 @@ export const parseBankDate = (raw: string): string | null => {
 const findIndex = (headers: string[], re: RegExp): number =>
   headers.findIndex((h) => re.test(h));
 
-/** Parsea un extracto bancario en CSV de forma tolerante. */
-export const parseBankCsv = (text: string): BankCsvParseResult => {
-  const rows: BankCsvRow[] = [];
-  const errors: BankCsvParseResult['errors'] = [];
-  const lines = text.split(/\r?\n/).filter((l) => l.trim() !== '');
-  if (lines.length === 0) return { rows, errors };
+/** Índices de columna (o -1 si no aplica) para mapear el extracto. */
+export interface BankMapping {
+  date: number;
+  concept: number;
+  amount: number;
+  credit: number;
+  debit: number;
+}
 
-  // Detectar la fila de cabecera: la primera con "fecha" + (importe o debe/haber).
+export interface BankTable {
+  delimiter: string;
+  headers: string[];
+  rows: string[][];
+  /** Mapeo de columnas sugerido automáticamente (editable por el usuario). */
+  mapping: BankMapping;
+}
+
+const EMPTY_MAPPING: BankMapping = {
+  date: -1,
+  concept: -1,
+  amount: -1,
+  credit: -1,
+  debit: -1,
+};
+
+/** Detecta delimitador y cabecera, y devuelve la tabla con un mapeo sugerido. */
+export const parseBankTable = (text: string): BankTable => {
+  const lines = text.split(/\r?\n/).filter((l) => l.trim() !== '');
+  if (lines.length === 0) {
+    return { delimiter: ';', headers: [], rows: [], mapping: EMPTY_MAPPING };
+  }
+
   let headerIndex = lines.findIndex((line) => {
     const delim = detectDelimiter(line);
     const cells = splitLine(line, delim);
@@ -119,37 +143,63 @@ export const parseBankCsv = (text: string): BankCsvParseResult => {
   const headers = splitLine(lines[headerIndex]!, delimiter).map((h) =>
     h.toLowerCase(),
   );
+  const rows = lines
+    .slice(headerIndex + 1)
+    .map((line) => splitLine(line, delimiter));
 
-  const dateCol = findIndex(headers, DATE_RE);
-  const conceptCol = findIndex(headers, CONCEPT_RE);
-  const amountCol = findIndex(headers, AMOUNT_RE);
-  const creditCol = findIndex(headers, CREDIT_RE);
-  const debitCol = findIndex(headers, DEBIT_RE);
+  const mapping: BankMapping = {
+    date: findIndex(headers, DATE_RE),
+    concept: findIndex(headers, CONCEPT_RE),
+    amount: findIndex(headers, AMOUNT_RE),
+    credit: findIndex(headers, CREDIT_RE),
+    debit: findIndex(headers, DEBIT_RE),
+  };
 
-  for (let i = headerIndex + 1; i < lines.length; i += 1) {
-    const cells = splitLine(lines[i]!, delimiter);
-    const date = dateCol >= 0 ? parseBankDate(cells[dateCol] ?? '') : null;
+  return { delimiter, headers, rows, mapping };
+};
+
+/** Construye las filas a partir de la tabla y un mapeo de columnas explícito. */
+export const buildBankRows = (
+  table: Pick<BankTable, 'rows'>,
+  mapping: BankMapping,
+): BankCsvParseResult => {
+  const rows: BankCsvRow[] = [];
+  const errors: BankCsvParseResult['errors'] = [];
+
+  table.rows.forEach((cells, index) => {
+    const date =
+      mapping.date >= 0 ? parseBankDate(cells[mapping.date] ?? '') : null;
 
     let amount = Number.NaN;
-    if (amountCol >= 0) {
-      amount = parseAmount(cells[amountCol] ?? '');
-    } else if (creditCol >= 0 || debitCol >= 0) {
-      const credit = creditCol >= 0 ? parseAmount(cells[creditCol] ?? '') : 0;
-      const debit = debitCol >= 0 ? parseAmount(cells[debitCol] ?? '') : 0;
+    if (mapping.amount >= 0) amount = parseAmount(cells[mapping.amount] ?? '');
+    if (
+      !Number.isFinite(amount) &&
+      (mapping.credit >= 0 || mapping.debit >= 0)
+    ) {
+      const credit =
+        mapping.credit >= 0 ? parseAmount(cells[mapping.credit] ?? '') : 0;
+      const debit =
+        mapping.debit >= 0 ? parseAmount(cells[mapping.debit] ?? '') : 0;
       amount =
         (Number.isNaN(credit) ? 0 : credit) - (Number.isNaN(debit) ? 0 : debit);
     }
 
     if (!date || !Number.isFinite(amount)) {
-      errors.push({ line: i + 1, message: 'Fecha o importe no válidos' });
-      continue;
+      errors.push({ line: index + 2, message: 'Fecha o importe no válidos' });
+      return;
     }
     rows.push({
       date,
-      concept: conceptCol >= 0 ? (cells[conceptCol] ?? '') : '',
+      concept: mapping.concept >= 0 ? (cells[mapping.concept] ?? '') : '',
       amount,
     });
-  }
+  });
 
   return { rows, errors };
+};
+
+/** Parsea un extracto bancario en CSV usando el mapeo auto-detectado. */
+export const parseBankCsv = (text: string): BankCsvParseResult => {
+  const table = parseBankTable(text);
+  return buildBankRows(table, table.mapping);
 };

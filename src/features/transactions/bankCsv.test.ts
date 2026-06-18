@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { parseAmount, parseBankCsv, parseBankDate } from './bankCsv';
+import {
+  buildBankRows,
+  parseAmount,
+  parseBankCsv,
+  parseBankDate,
+  parseBankTable,
+} from './bankCsv';
 
 describe('features/transactions/bankCsv', () => {
   it('parsea importes en formato español e inglés', () => {
@@ -33,6 +39,27 @@ describe('features/transactions/bankCsv', () => {
       amount: -45.2,
     });
     expect(rows[1]?.amount).toBe(2000);
+  });
+
+  it('expone tabla y mapeo, y permite mapeo manual de columnas', () => {
+    const csv = [
+      'F.Valor|Detalle movimiento|Cargo/Abono',
+      '03/05/2024|Recibo|-30,00',
+      '04/05/2024|Ingreso|100,00',
+    ].join('\n');
+    const table = parseBankTable(csv);
+    expect(table.delimiter).toBe('|');
+    expect(table.headers).toHaveLength(3);
+    // El usuario corrige el mapeo manualmente por índice.
+    const mapped = buildBankRows(table, {
+      date: 0,
+      concept: 1,
+      amount: 2,
+      credit: -1,
+      debit: -1,
+    });
+    expect(mapped.rows).toHaveLength(2);
+    expect(mapped.rows[1]).toMatchObject({ concept: 'Ingreso', amount: 100 });
   });
 
   it('soporta columnas Debe/Haber', () => {
