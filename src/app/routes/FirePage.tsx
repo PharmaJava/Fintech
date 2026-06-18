@@ -10,7 +10,10 @@ import { FinScoreCard } from '@/features/finscore/FinScoreCard';
 import { fiNumber, projectValue, yearsToFI } from '@/features/fire/fire';
 import { runMonteCarloAsync } from '@/features/fire/montecarloClient';
 import type { MonteCarloResult } from '@/features/fire/montecarlo';
-import { assetValue } from '@/features/networth/networth';
+import {
+  assetValue,
+  INVERTIBLE_CATEGORIES,
+} from '@/features/networth/networth';
 import {
   monthSummary,
   monthsWithActivity,
@@ -53,7 +56,7 @@ export function FirePage() {
 
   const defaults = useMemo<Record<Field, number>>(() => {
     const invertible = assets
-      .filter((a) => a.category === 'invested' || a.category === 'liquid')
+      .filter((a) => INVERTIBLE_CATEGORIES.has(a.category))
       .reduce((sum, a) => sum + fromCents(assetValue(a, valuations)), 0);
     const months = monthsWithActivity(transactions);
     const avgMonthlyExpense =

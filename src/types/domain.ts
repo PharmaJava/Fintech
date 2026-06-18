@@ -14,11 +14,22 @@ import type { Cents } from '@/lib/money';
 export type AccountType = 'cash' | 'bank' | 'broker' | 'other';
 
 export type AssetCategory =
+  // Liquidez
+  | 'cash' // dinero en cuenta corriente
+  | 'savings' // cuenta remunerada / ahorro
+  // Inversión
+  | 'index_funds' // fondos indexados
+  | 'stocks' // acciones / ETFs
+  | 'pension' // plan de pensiones
+  | 'fixed_income' // renta fija (bonos, depósitos)
+  | 'crypto' // criptomonedas
+  // Patrimonio físico / otros
+  | 'real_estate' // inmuebles
+  | 'vehicle' // vehículos
+  | 'other'
+  // Legacy (compatibilidad con datos antiguos)
   | 'liquid'
-  | 'invested'
-  | 'real_estate'
-  | 'vehicle'
-  | 'other';
+  | 'invested';
 
 export type RefType = 'asset' | 'liability';
 

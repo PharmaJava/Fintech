@@ -2,7 +2,11 @@ import { useMemo } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { t } from '@/i18n';
-import { assetValue, currentNetWorth } from '@/features/networth/networth';
+import {
+  assetValue,
+  currentNetWorth,
+  LIQUID_CATEGORIES,
+} from '@/features/networth/networth';
 import {
   monthOf,
   monthSummary,
@@ -57,7 +61,7 @@ export function FinScoreCard() {
           : 0;
 
       const liquidMajor = assets
-        .filter((a) => a.category === 'liquid')
+        .filter((a) => LIQUID_CATEGORIES.has(a.category))
         .reduce((sum, a) => sum + fromCents(assetValue(a, valuations)), 0);
       const emergency =
         avgMonthlyExpense > 0

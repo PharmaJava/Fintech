@@ -22,6 +22,24 @@ export interface NetWorthBreakdown {
   net: Cents;
 }
 
+/** Categorías consideradas líquidas (colchón de emergencia). */
+export const LIQUID_CATEGORIES: ReadonlySet<AssetCategory> =
+  new Set<AssetCategory>(['cash', 'savings', 'liquid']);
+
+/** Categorías consideradas invertibles para FIRE (excluye inmuebles/vehículos). */
+export const INVERTIBLE_CATEGORIES: ReadonlySet<AssetCategory> =
+  new Set<AssetCategory>([
+    'cash',
+    'savings',
+    'index_funds',
+    'stocks',
+    'pension',
+    'fixed_income',
+    'crypto',
+    'liquid',
+    'invested',
+  ]);
+
 export interface NetWorthPoint {
   date: string;
   net: Cents;

@@ -7,8 +7,13 @@
 import { z } from 'zod';
 
 export const ASSET_CATEGORIES = [
-  'liquid',
-  'invested',
+  'cash',
+  'savings',
+  'index_funds',
+  'stocks',
+  'pension',
+  'fixed_income',
+  'crypto',
   'real_estate',
   'vehicle',
   'other',

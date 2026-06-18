@@ -7,6 +7,7 @@ import { MonthPicker } from '@/components/shared/MonthPicker';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { AddTransactionDialog } from '@/features/transactions/AddTransactionDialog';
+import { BankImportDialog } from '@/features/transactions/BankImportDialog';
 import { RecurringCard } from '@/features/transactions/RecurringCard';
 import { inMonth, monthSummary } from '@/features/transactions/transactions';
 import { t } from '@/i18n';
@@ -53,9 +54,12 @@ export function TransactionsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <PageHeader title={t('transactions.title')} />
-        <AddTransactionDialog />
+        <div className="flex items-center gap-2">
+          <BankImportDialog />
+          <AddTransactionDialog />
+        </div>
       </div>
 
       <MonthPicker month={month} onChange={setMonth} />

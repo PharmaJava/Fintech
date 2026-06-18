@@ -113,7 +113,7 @@ Forma **descifrada** (dominio) en `src/types/domain.ts`; forma **cifrada**
 importes son `Cents` (enteros) y se cifran.
 
 - **Account** — `{ id, name*, type, currency, createdAt }`
-- **Asset** — `{ id, name*, category(liquid|invested|real_estate|vehicle|other), currency, createdAt }`
+- **Asset** — `{ id, name*, category(cash|savings|index_funds|stocks|pension|fixed_income|crypto|real_estate|vehicle|other; legacy: liquid|invested), currency, createdAt }`
 - **Liability** — `{ id, name*, principal*(Cents), interestRate?, createdAt }`
 - **Valuation** — `{ id, refId, refType, value*(Cents), date, createdAt }` — pieza
   que permite la **curva de patrimonio**. Sin histórico, no hay curva.

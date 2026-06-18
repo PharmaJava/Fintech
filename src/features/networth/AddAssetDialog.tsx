@@ -26,14 +26,14 @@ export function AddAssetDialog() {
   const addAsset = useNetworthStore((s) => s.addAsset);
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
-  const [category, setCategory] = useState<AssetCategory>('liquid');
+  const [category, setCategory] = useState<AssetCategory>('cash');
   const [value, setValue] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   const reset = (): void => {
     setName('');
-    setCategory('liquid');
+    setCategory('cash');
     setValue('');
     setError(null);
   };

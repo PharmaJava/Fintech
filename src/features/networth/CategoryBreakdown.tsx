@@ -10,11 +10,19 @@ import { assetsByCategory } from './networth';
 import { categoryLabel } from './labels';
 
 const COLORS: Record<AssetCategory, string> = {
-  liquid: '#10b981',
-  invested: '#3b82f6',
-  real_estate: '#f59e0b',
+  cash: '#10b981',
+  savings: '#14b8a6',
+  index_funds: '#3b82f6',
+  stocks: '#6366f1',
+  pension: '#0ea5e9',
+  fixed_income: '#06b6d4',
+  crypto: '#f59e0b',
+  real_estate: '#f97316',
   vehicle: '#8b5cf6',
   other: '#64748b',
+  // Legacy
+  liquid: '#10b981',
+  invested: '#3b82f6',
 };
 
 /** Donut con el reparto del valor de los activos por categoria. */

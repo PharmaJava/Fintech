@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import { create } from 'zustand';
 
 import type { ExcelTxnRow } from '@/features/excel/importWorkbook';
+import type { BankCsvRow } from '@/features/transactions/bankCsv';
 import { matchCategory } from '@/features/transactions/autorules';
 import { dueOccurrences } from '@/features/transactions/recurring';
 import type { CsvImportRow } from '@/features/transactions/csv';
@@ -39,12 +40,32 @@ const today = (): string => format(new Date(), 'yyyy-MM-dd');
 const DEFAULT_CATEGORIES: ReadonlyArray<
   Pick<Category, 'name' | 'kind' | 'color'>
 > = [
-  { name: 'Nomina', kind: 'income', color: '#10b981' },
-  { name: 'Otros ingresos', kind: 'income', color: '#22c55e' },
-  { name: 'Alimentacion', kind: 'expense', color: '#f59e0b' },
-  { name: 'Vivienda', kind: 'expense', color: '#3b82f6' },
+  // Ingresos
+  { name: 'Nómina', kind: 'income', color: '#10b981' },
+  { name: 'Ingresos extra', kind: 'income', color: '#22c55e' },
+  { name: 'Inversiones (dividendos)', kind: 'income', color: '#0ea5e9' },
+  { name: 'Reembolsos', kind: 'income', color: '#14b8a6' },
+  { name: 'Regalos recibidos', kind: 'income', color: '#84cc16' },
+  // Gastos
+  { name: 'Alimentación', kind: 'expense', color: '#f59e0b' },
+  { name: 'Restaurantes', kind: 'expense', color: '#fb923c' },
+  { name: 'Vivienda (alquiler/hipoteca)', kind: 'expense', color: '#3b82f6' },
+  { name: 'Suministros (luz/agua/gas)', kind: 'expense', color: '#0ea5e9' },
+  { name: 'Internet y teléfono', kind: 'expense', color: '#06b6d4' },
   { name: 'Transporte', kind: 'expense', color: '#8b5cf6' },
-  { name: 'Ocio', kind: 'expense', color: '#ec4899' },
+  { name: 'Combustible', kind: 'expense', color: '#a855f7' },
+  { name: 'Salud', kind: 'expense', color: '#ef4444' },
+  { name: 'Seguros', kind: 'expense', color: '#f43f5e' },
+  { name: 'Ropa y calzado', kind: 'expense', color: '#ec4899' },
+  { name: 'Ocio y entretenimiento', kind: 'expense', color: '#d946ef' },
+  { name: 'Suscripciones', kind: 'expense', color: '#6366f1' },
+  { name: 'Educación', kind: 'expense', color: '#4f46e5' },
+  { name: 'Viajes', kind: 'expense', color: '#0891b2' },
+  { name: 'Regalos', kind: 'expense', color: '#db2777' },
+  { name: 'Hogar y muebles', kind: 'expense', color: '#65a30d' },
+  { name: 'Mascotas', kind: 'expense', color: '#ca8a04' },
+  { name: 'Impuestos', kind: 'expense', color: '#78716c' },
+  { name: 'Comisiones bancarias', kind: 'expense', color: '#57534e' },
   { name: 'Otros gastos', kind: 'expense', color: '#64748b' },
 ];
 
@@ -105,6 +126,10 @@ interface FinanceState {
   materializeDueRecurring: () => Promise<number>;
 
   importTransactions: (rows: readonly CsvImportRow[]) => Promise<number>;
+  importBankCsv: (
+    accountId: string,
+    rows: readonly BankCsvRow[],
+  ) => Promise<number>;
 
   addAutoRule: (keyword: string, categoryId: string) => Promise<void>;
   deleteAutoRule: (id: string) => Promise<void>;
@@ -342,6 +367,38 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
       set({ transactions: await transactionRepository.getAll() });
     }
     return changed;
+  },
+
+  /** Importa un extracto bancario: deduce ingreso/gasto por signo y categoriza por reglas. */
+  importBankCsv: async (accountId, rows) => {
+    const rules = get().autoRules;
+    const categories = get().categories;
+    const fallbackExpense =
+      categories.find((c) => /otros gastos/i.test(c.name)) ??
+      categories.find((c) => c.kind === 'expense');
+    const fallbackIncome =
+      categories.find((c) => /ingresos extra|otros ingresos/i.test(c.name)) ??
+      categories.find((c) => c.kind === 'income');
+
+    let created = 0;
+    for (const row of rows) {
+      const isIncome = row.amount >= 0;
+      const fallback = isIncome ? fallbackIncome : fallbackExpense;
+      const categoryId = matchCategory(row.concept, rules) ?? fallback?.id;
+      if (!categoryId) continue;
+      await transactionRepository.add({
+        type: isIncome ? 'income' : 'expense',
+        amount: toCents(Math.abs(row.amount)),
+        accountId,
+        categoryId,
+        date: row.date,
+        note: row.concept,
+        tags: [],
+      });
+      created += 1;
+    }
+    await get().load();
+    return created;
   },
 
   /** Reconcilia movimientos desde un Excel: actualiza por id e inserta nuevos (Fase 7). */
