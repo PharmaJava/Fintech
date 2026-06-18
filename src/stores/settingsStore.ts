@@ -7,15 +7,25 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+import type { Locale } from '@/i18n';
+
 interface SettingsState {
   inactivityMinutes: number;
   currency: string;
   locale: string;
+  language: Locale;
   setInactivityMinutes: (minutes: number) => void;
   setCurrency: (currency: string, locale: string) => void;
+  setLanguage: (language: Locale) => void;
 }
 
 export const INACTIVITY_OPTIONS = [1, 5, 15, 30, 60] as const;
+
+/** Detecta el idioma inicial a partir del navegador (es por defecto). */
+const detectLanguage = (): Locale => {
+  if (typeof navigator === 'undefined') return 'es';
+  return navigator.language.toLowerCase().startsWith('en') ? 'en' : 'es';
+};
 
 export interface CurrencyOption {
   currency: string;
@@ -42,8 +52,10 @@ export const useSettingsStore = create<SettingsState>()(
       inactivityMinutes: 5,
       currency: 'EUR',
       locale: 'es-ES',
+      language: detectLanguage(),
       setInactivityMinutes: (inactivityMinutes) => set({ inactivityMinutes }),
       setCurrency: (currency, locale) => set({ currency, locale }),
+      setLanguage: (language) => set({ language }),
     }),
     { name: 'patrimonio-settings' },
   ),

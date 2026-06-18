@@ -2,6 +2,7 @@ import { Lock, Moon, Sun } from 'lucide-react';
 import { useEffect } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 
+import { LanguageToggle } from '@/components/shared/LanguageToggle';
 import { Button } from '@/components/ui/button';
 import { OnboardingWizard } from '@/features/onboarding/OnboardingWizard';
 import { t } from '@/i18n';
@@ -63,6 +64,7 @@ export function AppLayout() {
           {t('app.name')}
         </Link>
         <div className="flex items-center gap-1">
+          <LanguageToggle />
           <Button
             variant="ghost"
             size="icon"

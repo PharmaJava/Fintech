@@ -259,7 +259,13 @@ Requisitos: Node 22+, pnpm 10+.
 - **Fase 7** ✅: Excel bidireccional con reconciliación por `id` (aislada).
 
 > **Estamos en**: **todas las fases (0-7) completas**. Además: web pública
-> (landing + blog) con SEO y la app servida bajo `/app`.
+> (landing + blog) con SEO y la app servida bajo `/app`, y soporte **bilingüe
+> (es/en)**: `i18n/messages.ts` define `es` (fuente de verdad) y `en` tipado como
+> `Record<MessageKey, string>` (paridad de claves en compilación). El idioma se
+> guarda en `settingsStore` (`language`), se autodetecta del navegador y se cambia
+> con `LanguageToggle` (cabeceras) o `LanguageCard` (Ajustes). El blog es bilingüe
+> (`content/blog.ts` con `es`/`en` por post). `App` remonta con `key={language}`
+> para refrescar los textos al cambiar de idioma.
 
 Aviso a decidir más adelante: el "multi-dispositivo cifrado" choca con "100%
 local" (sync E2E peer-to-peer o se descarta).

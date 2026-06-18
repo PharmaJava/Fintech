@@ -2,7 +2,9 @@ import { Menu, Moon, Sun } from 'lucide-react';
 import { useState } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 
+import { LanguageToggle } from '@/components/shared/LanguageToggle';
 import { Button } from '@/components/ui/button';
+import { t } from '@/i18n';
 import { cn } from '@/lib/utils';
 import { useThemeStore } from '@/stores/themeStore';
 
@@ -20,7 +22,7 @@ export function PublicLayout() {
             <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
               P
             </span>
-            <span>Patrimonio</span>
+            <span>{t('app.name')}</span>
           </Link>
 
           <nav className="hidden items-center gap-1 sm:flex">
@@ -34,7 +36,7 @@ export function PublicLayout() {
                 )
               }
             >
-              Inicio
+              {t('site.nav.home')}
             </NavLink>
             <NavLink
               to="/blog"
@@ -45,12 +47,13 @@ export function PublicLayout() {
                 )
               }
             >
-              Blog
+              {t('site.nav.blog')}
             </NavLink>
+            <LanguageToggle />
             <Button
               variant="ghost"
               size="icon"
-              aria-label="Cambiar tema"
+              aria-label={t('action.theme.toggle')}
               onClick={toggleTheme}
             >
               {theme === 'dark' ? (
@@ -60,18 +63,19 @@ export function PublicLayout() {
               )}
             </Button>
             <Button asChild size="sm">
-              <Link to="/app">Abrir la app</Link>
+              <Link to="/app">{t('site.nav.openApp')}</Link>
             </Button>
           </nav>
 
           <div className="flex items-center gap-1 sm:hidden">
+            <LanguageToggle />
             <Button asChild size="sm">
-              <Link to="/app">Abrir app</Link>
+              <Link to="/app">{t('site.nav.openApp')}</Link>
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              aria-label="Menú"
+              aria-label={t('site.nav.menu')}
               onClick={() => setMenuOpen((v) => !v)}
             >
               <Menu className="size-5" />
@@ -85,14 +89,14 @@ export function PublicLayout() {
               className="block py-2 text-sm"
               onClick={() => setMenuOpen(false)}
             >
-              Inicio
+              {t('site.nav.home')}
             </Link>
             <Link
               to="/blog"
               className="block py-2 text-sm"
               onClick={() => setMenuOpen(false)}
             >
-              Blog
+              {t('site.nav.blog')}
             </Link>
           </nav>
         )}
@@ -106,26 +110,24 @@ export function PublicLayout() {
         <div className="mx-auto w-full max-w-5xl px-4 py-8 text-sm text-muted-foreground">
           <div className="flex flex-col justify-between gap-4 sm:flex-row">
             <div>
-              <p className="font-semibold text-foreground">Patrimonio</p>
-              <p className="mt-1 max-w-sm">
-                Tu patrimonio neto real, privado y cifrado. Local-first, sin
-                nube.
-              </p>
+              <p className="font-semibold text-foreground">{t('app.name')}</p>
+              <p className="mt-1 max-w-sm">{t('site.footer.tagline')}</p>
             </div>
             <nav className="flex flex-col gap-1">
               <Link to="/" className="hover:text-foreground">
-                Inicio
+                {t('site.nav.home')}
               </Link>
               <Link to="/blog" className="hover:text-foreground">
-                Blog
+                {t('site.nav.blog')}
               </Link>
               <Link to="/app" className="hover:text-foreground">
-                Abrir la app
+                {t('site.nav.openApp')}
               </Link>
             </nav>
           </div>
           <p className="mt-6">
-            © {new Date().getFullYear()} Patrimonio. Hecho con privacidad.
+            © {new Date().getFullYear()} {t('app.name')}.{' '}
+            {t('site.footer.rights')}
           </p>
         </div>
       </footer>
