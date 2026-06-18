@@ -254,6 +254,10 @@ export const messages = {
     'onboarding.done.text':
       'Ya puedes registrar movimientos, importar el CSV de tu banco, ver tu patrimonio y tu camino FIRE.',
 
+    'currency.title': 'Moneda de visualización',
+    'currency.help':
+      'Cambia cómo se muestran los importes. Afecta solo al formato, no convierte divisas.',
+
     'install.title': 'Instala la app',
     'install.button': 'Instalar Patrimonio',
     'install.ios1': 'En iPhone/iPad: pulsa',

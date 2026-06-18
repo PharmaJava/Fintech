@@ -1,18 +1,26 @@
 /**
  * lib/format — formateo de presentacion (moneda y fechas) para la UI.
  *
- * Centraliza el locale para que toda la UI muestre los importes y fechas igual.
+ * La moneda/locale de visualización es configurable (multidivisa). Se mantiene
+ * una config en memoria que sincroniza el settingsStore (ver providers).
  */
 import { format, parseISO } from 'date-fns';
 
 import { formatMoney, type Cents } from '@/lib/money';
 
-const LOCALE = 'es-ES';
-const CURRENCY = 'EUR';
+let moneyConfig: { locale: string; currency: string } = {
+  locale: 'es-ES',
+  currency: 'EUR',
+};
 
-/** Formatea un importe `Cents` como euros (p.ej. "1.234,56 €"). */
+/** Actualiza la moneda/locale de visualización (sincronizado con settingsStore). */
+export const setMoneyFormat = (locale: string, currency: string): void => {
+  moneyConfig = { locale, currency };
+};
+
+/** Formatea un importe `Cents` en la moneda de visualización (p.ej. "1.234,56 €"). */
 export const formatEur = (value: Cents): string =>
-  formatMoney(value, LOCALE, CURRENCY);
+  formatMoney(value, moneyConfig.locale, moneyConfig.currency);
 
 /** Formatea una fecha ISO (YYYY-MM-DD o timestamp) como "dd/MM/yyyy". */
 export const formatDate = (isoDate: string): string =>
