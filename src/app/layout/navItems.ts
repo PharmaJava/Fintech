@@ -1,5 +1,6 @@
 import {
   Flame,
+  History,
   LayoutDashboard,
   PiggyBank,
   Receipt,
@@ -20,6 +21,7 @@ export interface NavItem {
 export const NAV_ITEMS: NavItem[] = [
   { to: '/app', labelKey: 'nav.dashboard', icon: LayoutDashboard, end: true },
   { to: '/app/networth', labelKey: 'nav.networth', icon: Wallet },
+  { to: '/app/timeline', labelKey: 'nav.timeline', icon: History },
   { to: '/app/transactions', labelKey: 'nav.transactions', icon: Receipt },
   { to: '/app/budgets', labelKey: 'nav.budgets', icon: PiggyBank },
   { to: '/app/fire', labelKey: 'nav.fire', icon: Flame },

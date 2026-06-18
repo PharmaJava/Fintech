@@ -14,10 +14,18 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { t } from '@/i18n';
+import { t, type MessageKey } from '@/i18n';
 import { formatEur } from '@/lib/format';
 import { useGoalsStore } from '@/stores/goalsStore';
 import type { Goal } from '@/types/domain';
+
+/** Sugerencias de metas comunes (nombre + importe orientativo, editable). */
+const GOAL_PRESETS: { labelKey: MessageKey; amount: number }[] = [
+  { labelKey: 'goals.preset.emergency', amount: 10_000 },
+  { labelKey: 'goals.preset.vacations', amount: 3_000 },
+  { labelKey: 'goals.preset.home', amount: 30_000 },
+  { labelKey: 'goals.preset.car', amount: 15_000 },
+];
 
 function AddGoalDialog() {
   const addGoal = useGoalsStore((s) => s.addGoal);
@@ -50,6 +58,25 @@ function AddGoalDialog() {
           <DialogTitle>{t('goals.add')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={(e) => void submit(e)} className="space-y-3">
+          <div className="space-y-1.5">
+            <Label>{t('goals.presets')}</Label>
+            <div className="flex flex-wrap gap-1.5">
+              {GOAL_PRESETS.map((preset) => (
+                <Button
+                  key={preset.labelKey}
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setName(t(preset.labelKey));
+                    setTarget(String(preset.amount));
+                  }}
+                >
+                  {t(preset.labelKey)}
+                </Button>
+              ))}
+            </div>
+          </div>
           <div className="space-y-1.5">
             <Label htmlFor="goal-name">{t('goals.name')}</Label>
             <Input

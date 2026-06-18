@@ -12,6 +12,7 @@ import type {
   AutoRule,
   Budget,
   Category,
+  FinancialEvent,
   Goal,
   Liability,
   RecurringRule,
@@ -24,6 +25,7 @@ import { assetRepository } from './assetRepository';
 import { autoRuleRepository } from './autoRuleRepository';
 import { budgetRepository } from './budgetRepository';
 import { categoryRepository } from './categoryRepository';
+import { financialEventRepository } from './financialEventRepository';
 import { goalRepository } from './goalRepository';
 import { liabilityRepository } from './liabilityRepository';
 import { recurringRuleRepository } from './recurringRuleRepository';
@@ -41,6 +43,8 @@ export interface DataSnapshot {
   recurringRules: RecurringRule[];
   goals: Goal[];
   autoRules: AutoRule[];
+  /** Opcional: los backups antiguos (anteriores al timeline) no lo incluyen. */
+  events?: FinancialEvent[];
 }
 
 /** Lee todos los datos (descifrados) en un snapshot. */
@@ -56,6 +60,7 @@ export const snapshotAll = async (): Promise<DataSnapshot> => {
     recurringRules,
     goals,
     autoRules,
+    events,
   ] = await Promise.all([
     accountRepository.getAll(),
     assetRepository.getAll(),
@@ -67,6 +72,7 @@ export const snapshotAll = async (): Promise<DataSnapshot> => {
     recurringRuleRepository.getAll(),
     goalRepository.getAll(),
     autoRuleRepository.getAll(),
+    financialEventRepository.getAll(),
   ]);
   return {
     accounts,
@@ -79,6 +85,7 @@ export const snapshotAll = async (): Promise<DataSnapshot> => {
     recurringRules,
     goals,
     autoRules,
+    events,
   };
 };
 
@@ -95,6 +102,7 @@ export const clearAllData = async (): Promise<void> => {
     getDb().recurringRules.clear(),
     getDb().goals.clear(),
     getDb().autoRules.clear(),
+    getDb().financialEvents.clear(),
   ]);
 };
 
@@ -112,5 +120,6 @@ export const restoreAll = async (snapshot: DataSnapshot): Promise<void> => {
     ...snapshot.recurringRules.map((x) => recurringRuleRepository.put(x)),
     ...snapshot.goals.map((x) => goalRepository.put(x)),
     ...snapshot.autoRules.map((x) => autoRuleRepository.put(x)),
+    ...(snapshot.events ?? []).map((x) => financialEventRepository.put(x)),
   ]);
 };

@@ -11,6 +11,7 @@ import { ExcelImport } from '@/features/excel/ExcelImport';
 import { ProfilesManager } from '@/features/profiles/ProfilesManager';
 import { InstallCard } from '@/features/pwa/InstallCard';
 import { CurrencyCard } from '@/features/settings/CurrencyCard';
+import { LanguageCard } from '@/features/settings/LanguageCard';
 import { SecuritySettings } from '@/features/security/SecuritySettings';
 import { CsvTools } from '@/features/transactions/CsvTools';
 import { RulesManager } from '@/features/transactions/RulesManager';
@@ -39,6 +40,7 @@ export function SettingsPage() {
         </CardContent>
       </Card>
       <InstallCard />
+      <LanguageCard />
       <CurrencyCard />
       <ProfilesManager />
       <SecuritySettings />

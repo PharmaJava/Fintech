@@ -88,6 +88,28 @@ describe('features/fire/montecarlo', () => {
     expect(result.successRate).toBeLessThanOrEqual(1);
   });
 
+  it('ajusta por inflacion: rentabilidad real menor y resultados mas bajos', () => {
+    const base = {
+      initial: 100_000,
+      monthlyContribution: 1_000,
+      years: 20,
+      annualReturnMean: 0.06,
+      annualReturnStd: 0.15,
+      target: 500_000,
+      runs: 500,
+    };
+    const nominal = runMonteCarlo(base, 99);
+    const real = runMonteCarlo({ ...base, annualInflation: 0.02 }, 99);
+
+    // Sin inflacion, la rentabilidad real es la nominal.
+    expect(nominal.realAnnualReturn).toBeCloseTo(0.06, 10);
+    // Con 2% de inflacion, la real baja (~3.92%).
+    expect(real.realAnnualReturn).toBeLessThan(nominal.realAnnualReturn);
+    expect(real.realAnnualReturn).toBeCloseTo(1.06 / 1.02 - 1, 10);
+    // Y el valor mediano final (en euros de hoy) es menor.
+    expect(real.p50).toBeLessThan(nominal.p50);
+  });
+
   it('mulberry32 produce numeros en [0,1)', () => {
     const rng = mulberry32(1);
     for (let i = 0; i < 100; i += 1) {

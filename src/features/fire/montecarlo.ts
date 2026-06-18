@@ -13,23 +13,31 @@ export interface MonteCarloParams {
   monthlyContribution: number;
   /** Horizonte en anos. */
   years: number;
-  /** Rentabilidad real anual media (p.ej. 0.06). */
+  /** Rentabilidad NOMINAL anual media (p.ej. 0.06). Se ajusta por inflacion. */
   annualReturnMean: number;
   /** Volatilidad anual (desviacion tipica, p.ej. 0.15). */
   annualReturnStd: number;
-  /** Objetivo a superar al final (euros). */
+  /** Objetivo a superar al final, en euros de HOY (euros reales). */
   target: number;
   /** Numero de simulaciones. */
   runs: number;
+  /**
+   * Inflacion anual esperada (p.ej. 0.02). Convierte la rentabilidad nominal en
+   * real, de modo que los resultados quedan en euros de hoy (poder adquisitivo).
+   * Por defecto 0 (sin ajuste).
+   */
+  annualInflation?: number;
 }
 
 export interface MonteCarloResult {
   /** Fraccion de simulaciones que terminan >= target. */
   successRate: number;
-  /** Percentiles del valor final (euros). */
+  /** Percentiles del valor final, en euros de HOY (reales). */
   p10: number;
   p50: number;
   p90: number;
+  /** Rentabilidad real anual usada (nominal ajustada por inflacion). */
+  realAnnualReturn: number;
 }
 
 /** RNG determinista (mulberry32) para resultados reproducibles/testables. */
@@ -70,7 +78,11 @@ export const runMonteCarlo = (
   let successes = 0;
 
   const months = Math.round(params.years * 12);
-  const monthlyMean = (1 + params.annualReturnMean) ** (1 / 12) - 1;
+  // Rentabilidad real = nominal descontada la inflacion (ecuacion de Fisher).
+  // Asi todo el resultado queda en euros de hoy y es comparable con el objetivo.
+  const inflation = params.annualInflation ?? 0;
+  const realAnnualReturn = (1 + params.annualReturnMean) / (1 + inflation) - 1;
+  const monthlyMean = (1 + realAnnualReturn) ** (1 / 12) - 1;
   const monthlyStd = params.annualReturnStd / Math.sqrt(12);
 
   for (let run = 0; run < params.runs; run += 1) {
@@ -89,5 +101,6 @@ export const runMonteCarlo = (
     p10: percentile(finals, 0.1),
     p50: percentile(finals, 0.5),
     p90: percentile(finals, 0.9),
+    realAnnualReturn,
   };
 };

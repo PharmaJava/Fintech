@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { Card, CardContent } from '@/components/ui/card';
 import { GoalsCard } from '@/features/goals/GoalsCard';
+import { SelfComparisonCard } from '@/features/insights/SelfComparisonCard';
 import { NetWorthSummary } from '@/features/networth/NetWorthSummary';
 import { currentNetWorth } from '@/features/networth/networth';
 import { monthSummary } from '@/features/transactions/transactions';
@@ -70,6 +71,7 @@ export function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+      <SelfComparisonCard />
       <GoalsCard />
     </div>
   );

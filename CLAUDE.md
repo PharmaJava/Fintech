@@ -122,6 +122,9 @@ importes son `Cents` (enteros) y se cifran.
 - **RecurringRule** — `{ id, templateTxn*, frequency, nextRun }`
 - **Budget** — `{ id, categoryId, month, limit*(Cents) }`
 - **Goal** — `{ id, name*, target*(Cents), current*(Cents), targetDate? }`
+- **FinancialEvent** — `{ id, title*, date, kind, note?*, createdAt }` — hito de la
+  **cronología financiera** (timeline). `date`/`kind` en claro (indexables). Tabla
+  `financialEvents` (esquema v3).
 - **AppMeta** — `{ id:'app', salt, verifier(cifrado), schemaVersion, locale? }`
 
 **Implementado en Fase 0**: repositorios de Account, Asset, Liability, Valuation.
@@ -259,7 +262,23 @@ Requisitos: Node 22+, pnpm 10+.
 - **Fase 7** ✅: Excel bidireccional con reconciliación por `id` (aislada).
 
 > **Estamos en**: **todas las fases (0-7) completas**. Además: web pública
-> (landing + blog) con SEO y la app servida bajo `/app`.
+> (landing + blog) con SEO y la app servida bajo `/app`, y soporte **bilingüe
+> (es/en)**: `i18n/messages.ts` define `es` (fuente de verdad) y `en` tipado como
+> `Record<MessageKey, string>` (paridad de claves en compilación). El idioma se
+> guarda en `settingsStore` (`language`), se autodetecta del navegador y se cambia
+> con `LanguageToggle` (cabeceras) o `LanguageCard` (Ajustes). El blog es bilingüe
+> (`content/blog.ts` con `es`/`en` por post). `App` remonta con `key={language}`
+> para refrescar los textos al cambiar de idioma.
+>
+> **v1.0 (en curso)**: (1) **Insights** — `features/insights` compara contra "ti
+> mismo" (snapshot mensual + delta de patrimonio/gasto/tasa de ahorro a 12 meses),
+> tarjeta en el Dashboard. (2) **Cronología financiera** — `features/timeline`
+> con la entidad cifrada `FinancialEvent`; cada hito muestra el patrimonio en esa
+> fecha y su variación (impacto real, sin atribuciones inventadas). (3) **Monte
+> Carlo honesto** — la rentabilidad de entrada es nominal y se ajusta por
+> inflación (euros de hoy); panel de supuestos + aviso anti-predicción que cita la
+> secuencia de rentabilidades. (4) **Presets de metas** (fondo de emergencia,
+> vacaciones, vivienda, coche) en el diálogo de metas.
 
 Aviso a decidir más adelante: el "multi-dispositivo cifrado" choca con "100%
 local" (sync E2E peer-to-peer o se descarta).

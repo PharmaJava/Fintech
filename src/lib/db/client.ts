@@ -19,6 +19,7 @@ import type {
   StoredAutoRule,
   StoredBudget,
   StoredCategory,
+  StoredFinancialEvent,
   StoredGoal,
   StoredLiability,
   StoredRecurringRule,
@@ -37,6 +38,7 @@ export class PatrimonioDB extends Dexie {
   budgets!: EntityTable<StoredBudget, 'id'>;
   goals!: EntityTable<StoredGoal, 'id'>;
   autoRules!: EntityTable<StoredAutoRule, 'id'>;
+  financialEvents!: EntityTable<StoredFinancialEvent, 'id'>;
   appMeta!: EntityTable<AppMeta, 'id'>;
 
   constructor(name: string) {

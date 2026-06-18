@@ -134,3 +134,23 @@ export interface AutoRule {
   keyword: string;
   categoryId: string;
 }
+
+/** Tipo de evento de la linea temporal (no sensible: define icono/color). */
+export type EventKind =
+  | 'milestone'
+  | 'purchase'
+  | 'investment'
+  | 'debt'
+  | 'income'
+  | 'family'
+  | 'other';
+
+/** Evento de la cronologia financiera: un hito en la vida del usuario. (* title y note sensibles) */
+export interface FinancialEvent {
+  id: string;
+  title: string;
+  date: string; // YYYY-MM-DD
+  kind: EventKind;
+  note?: string;
+  createdAt: string;
+}

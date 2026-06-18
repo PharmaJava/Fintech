@@ -13,7 +13,7 @@
 import type { Dexie, Transaction } from 'dexie';
 
 /** Version actual del esquema de datos. */
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 interface SchemaVersion {
   version: number;
@@ -43,6 +43,13 @@ export const SCHEMA_VERSIONS: readonly SchemaVersion[] = [
     version: 2,
     stores: {
       autoRules: 'id, categoryId',
+    },
+  },
+  {
+    // v3: eventos de la cronologia financiera (timeline).
+    version: 3,
+    stores: {
+      financialEvents: 'id, date, kind, createdAt',
     },
   },
 ];
