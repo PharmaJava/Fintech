@@ -31,7 +31,8 @@ type Field =
   | 'contribution'
   | 'ret'
   | 'vol'
-  | 'horizon';
+  | 'horizon'
+  | 'infl';
 
 const eur = (major: number): string =>
   formatEur(cents(Math.round(major * 100)));
@@ -74,6 +75,7 @@ export function FirePage() {
       ret: 6,
       vol: 15,
       horizon: 20,
+      infl: 2,
     };
   }, [assets, valuations, transactions]);
 
@@ -86,17 +88,23 @@ export function FirePage() {
   const setField = (field: Field, raw: string): void =>
     setOverrides((prev) => ({ ...prev, [field]: raw }));
 
+  // Rentabilidad real (nominal descontada la inflacion). Mantiene FI number,
+  // proyeccion y Monte Carlo en euros de hoy (poder adquisitivo comparable).
+  const nominalReturn = num('ret') / 100;
+  const inflation = num('infl') / 100;
+  const realReturn = (1 + nominalReturn) / (1 + inflation) - 1;
+
   const fi = fiNumber(toCents(num('annualExpenses')), num('swr') / 100);
   const years = yearsToFI({
     current: toCents(num('initial')),
     monthlyContribution: toCents(num('contribution')),
-    annualReturn: num('ret') / 100,
+    annualReturn: realReturn,
     target: fi,
   });
   const projected = projectValue(
     toCents(num('initial')),
     toCents(num('contribution')),
-    num('ret') / 100,
+    realReturn,
     num('horizon'),
   );
 
@@ -107,10 +115,11 @@ export function FirePage() {
         initial: num('initial'),
         monthlyContribution: num('contribution'),
         years: num('horizon'),
-        annualReturnMean: num('ret') / 100,
+        annualReturnMean: nominalReturn,
         annualReturnStd: num('vol') / 100,
         target: fromCents(fi),
         runs: 1000,
+        annualInflation: inflation,
       });
       setResult(res);
     } finally {
@@ -126,6 +135,7 @@ export function FirePage() {
     { field: 'ret', labelKey: 'fire.return' },
     { field: 'vol', labelKey: 'fire.volatility' },
     { field: 'horizon', labelKey: 'fire.horizon' },
+    { field: 'infl', labelKey: 'fire.inflation' },
   ];
 
   return (
@@ -179,6 +189,7 @@ export function FirePage() {
           </CardContent>
         </Card>
       </div>
+      <p className="text-xs text-muted-foreground">{t('fire.realTermsNote')}</p>
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between gap-2 p-4">
@@ -225,10 +236,36 @@ export function FirePage() {
                   <p className="font-semibold">{eur(result.p90)}</p>
                 </div>
               </div>
+              <div className="rounded-md border p-3 text-xs">
+                <p className="mb-2 font-semibold">
+                  {t('fire.assumptions.title')}
+                </p>
+                <dl className="space-y-1 text-muted-foreground">
+                  <div className="flex justify-between gap-2">
+                    <dt>{t('fire.assumptions.realReturn')}</dt>
+                    <dd className="tabular-nums">
+                      {(result.realAnnualReturn * 100).toFixed(1)}%
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <dt>{t('fire.assumptions.inflation')}</dt>
+                    <dd className="tabular-nums">{num('infl')}%</dd>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <dt>{t('fire.assumptions.volatility')}</dt>
+                    <dd className="tabular-nums">{num('vol')}%</dd>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <dt>{t('fire.assumptions.runs')}</dt>
+                    <dd className="tabular-nums">1000</dd>
+                  </div>
+                </dl>
+                <p className="mt-2">{t('fire.assumptions.success')}</p>
+              </div>
             </>
           )}
           <p className="text-xs text-muted-foreground">
-            {t('fire.montecarlo.help')}
+            {t('fire.disclaimer')}
           </p>
         </CardContent>
       </Card>
