@@ -278,7 +278,19 @@ Requisitos: Node 22+, pnpm 10+.
 > Carlo honesto** — la rentabilidad de entrada es nominal y se ajusta por
 > inflación (euros de hoy); panel de supuestos + aviso anti-predicción que cita la
 > secuencia de rentabilidades. (4) **Presets de metas** (fondo de emergencia,
-> vacaciones, vivienda, coche) en el diálogo de metas.
+> vacaciones, vivienda, coche) en el diálogo de metas. (5) **Gastos** —
+> `features/expenses` (ruta `/app/expenses`, pestaña "Gastos"): registro rápido
+> diario (importe + categoría de un toque, fecha = hoy), totales hoy/semana/mes,
+> **proyección de fin de mes** (burn rate, extrapola el ritmo sin predecir) y
+> **detección de suscripciones** (gastos con mismo concepto+importe en ≥2 meses).
+> Todo son funciones puras sobre los movimientos existentes: NO hay entidad nueva
+> (un gasto ES una `Transaction` de tipo `expense`). (6) **Tasa de ahorro
+> mensual** — `savingsRateSeries` en `features/insights` + `SavingsRateCard` en el
+> Dashboard (evolución de los últimos 6 meses). (7) **Export/Import JSON** —
+> `features/security/jsonBackup` (+ `JsonBackupCard` en Ajustes): snapshot
+> completo en JSON PLANO (sin cifrar) reutilizando `snapshotAll`/`restoreAll`;
+> import valida con Zod y **reemplaza** todo (confirmación previa). Para copias
+> seguras sigue el backup cifrado.
 
 Aviso a decidir más adelante: el "multi-dispositivo cifrado" choca con "100%
 local" (sync E2E peer-to-peer o se descarta).

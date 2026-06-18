@@ -3,7 +3,12 @@ import { describe, expect, it } from 'vitest';
 import { cents } from '@/lib/money';
 import type { Asset, Liability, Transaction, Valuation } from '@/types/domain';
 
-import { compareToSelf, monthlySnapshot, savingsRate } from './insights';
+import {
+  compareToSelf,
+  monthlySnapshot,
+  savingsRate,
+  savingsRateSeries,
+} from './insights';
 
 const asset = (id: string): Asset => ({
   id,
@@ -83,6 +88,22 @@ describe('monthlySnapshot', () => {
     expect(snap.income).toBe(0);
     expect(snap.expense).toBe(0);
     expect(snap.savings).toBe(0);
+  });
+});
+
+describe('savingsRateSeries', () => {
+  it('devuelve los últimos N meses en orden ascendente con su tasa', () => {
+    const series = savingsRateSeries(transactions, '2026-06', 3);
+    expect(series.map((p) => p.month)).toEqual([
+      '2026-04',
+      '2026-05',
+      '2026-06',
+    ]);
+    // El último mes: ahorro 1.060 € / ingresos 2.500 € = 0,424.
+    expect(series[2]?.savings).toBe(106_000);
+    expect(series[2]?.rate).toBeCloseTo(0.424, 10);
+    // Meses sin ingresos → tasa null (no divide por cero).
+    expect(series[0]?.rate).toBeNull();
   });
 });
 
