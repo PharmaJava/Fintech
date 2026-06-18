@@ -213,6 +213,11 @@ const es = {
   'goals.contribute': 'Aportar',
   'goals.contributeAmount': 'Cantidad a aportar',
   'goals.reached': 'Conseguida',
+  'goals.presets': 'Sugerencias',
+  'goals.preset.emergency': 'Fondo de emergencia',
+  'goals.preset.vacations': 'Vacaciones',
+  'goals.preset.home': 'Entrada vivienda',
+  'goals.preset.car': 'Coche',
 
   'rules.title': 'Reglas automaticas',
   'rules.subtitle': 'Auto-categoriza movimientos cuya nota contenga un texto.',
@@ -611,6 +616,11 @@ const en: Record<MessageKey, string> = {
   'goals.contribute': 'Contribute',
   'goals.contributeAmount': 'Amount to contribute',
   'goals.reached': 'Reached',
+  'goals.presets': 'Suggestions',
+  'goals.preset.emergency': 'Emergency fund',
+  'goals.preset.vacations': 'Vacation',
+  'goals.preset.home': 'Home down payment',
+  'goals.preset.car': 'Car',
 
   'rules.title': 'Automatic rules',
   'rules.subtitle': 'Auto-categorize transactions whose note contains a text.',
