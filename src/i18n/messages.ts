@@ -263,6 +263,13 @@ const es = {
   'language.title': 'Idioma',
   'language.help':
     'Cambia el idioma de la interfaz. Tu eleccion se guarda en este dispositivo.',
+  'insights.compare.title': 'Comparación contigo mismo',
+  'insights.compare.window': 'Frente a hace 12 meses',
+  'insights.netWorth': 'Patrimonio neto',
+  'insights.expense': 'Gasto del mes',
+  'insights.savingsRate': 'Tasa de ahorro',
+  'insights.points': 'pts',
+  'insights.empty': 'Registra datos durante unos meses para ver tu progreso.',
 
   'install.title': 'Instala la app',
   'install.button': 'Instalar Patrimonio',
@@ -625,6 +632,13 @@ const en: Record<MessageKey, string> = {
   'language.title': 'Language',
   'language.help':
     'Changes the interface language. Your choice is saved on this device.',
+  'insights.compare.title': 'Compared to yourself',
+  'insights.compare.window': 'Versus 12 months ago',
+  'insights.netWorth': 'Net worth',
+  'insights.expense': 'This month spending',
+  'insights.savingsRate': 'Savings rate',
+  'insights.points': 'pts',
+  'insights.empty': 'Track data for a few months to see your progress.',
 
   'install.title': 'Install the app',
   'install.button': 'Install Patrimonio',
