@@ -219,6 +219,38 @@ export const messages = {
     'excelImport.updated': 'actualizados',
     'excelImport.errors': 'filas con errores',
 
+    'onboarding.step': 'Paso',
+    'onboarding.of': 'de',
+    'onboarding.next': 'Siguiente',
+    'onboarding.back': 'Atrás',
+    'onboarding.finish': 'Finalizar',
+    'onboarding.skip': 'Saltar',
+    'onboarding.launch': 'Asistente de inicio',
+    'onboarding.welcome.title': 'Bienvenido a Patrimonio',
+    'onboarding.welcome.text':
+      'Vamos a configurar lo básico en un minuto. Tus datos se quedan cifrados en tu dispositivo, sin nube.',
+    'onboarding.account.title': 'Crea tu primera cuenta',
+    'onboarding.account.text':
+      'Una cuenta es donde tienes tu dinero (banco, efectivo, broker). Podrás añadir más luego.',
+    'onboarding.account.skip': 'Cuenta creada o la añado luego',
+    'onboarding.asset.title': '¿Qué tienes y dónde?',
+    'onboarding.asset.text':
+      'Añade un activo con su valor actual: dinero en cuenta, fondos, plan de pensiones, inmueble…',
+    'onboarding.asset.name': 'Ej: Cuenta nómina, Indexa, Plan BBVA…',
+    'onboarding.done.title': '¡Todo listo!',
+    'onboarding.done.text':
+      'Ya puedes registrar movimientos, importar el CSV de tu banco, ver tu patrimonio y tu camino FIRE.',
+
+    'install.title': 'Instala la app',
+    'install.button': 'Instalar Patrimonio',
+    'install.ios1': 'En iPhone/iPad: pulsa',
+    'install.ios2': 'Compartir y luego',
+    'install.ios3': '"Añadir a pantalla de inicio".',
+    'install.generic':
+      'Usa el menú del navegador → "Instalar app" / "Añadir a pantalla de inicio".',
+    'install.help':
+      'Funciona como una app nativa: icono propio, pantalla completa y offline.',
+
     'common.save': 'Guardar',
     'common.cancel': 'Cancelar',
     'common.delete': 'Eliminar',

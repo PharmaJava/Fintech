@@ -3,8 +3,12 @@ import { useEffect } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
+import { OnboardingWizard } from '@/features/onboarding/OnboardingWizard';
 import { t } from '@/i18n';
 import { lock, resetInactivityTimer, setInactivityTimeout } from '@/lib/crypto';
+import { useFinanceStore } from '@/stores/financeStore';
+import { useOnboardingStore } from '@/stores/onboardingStore';
+import { useProfilesStore } from '@/stores/profilesStore';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useThemeStore } from '@/stores/themeStore';
 
@@ -27,6 +31,16 @@ export function AppLayout() {
   useEffect(() => {
     setInactivityTimeout(inactivityMinutes * 60_000);
   }, [inactivityMinutes]);
+
+  // Primer inicio: siembra categorías por defecto y abre el asistente una vez.
+  const activeProfileId = useProfilesStore((s) => s.activeId);
+  useEffect(() => {
+    const { isCompleted, openWizard } = useOnboardingStore.getState();
+    void useFinanceStore.getState().seedDefaultCategoriesIfEmpty();
+    if (!isCompleted(activeProfileId)) {
+      openWizard();
+    }
+  }, [activeProfileId]);
 
   // Reinicia el temporizador de inactividad ante actividad del usuario.
   useEffect(() => {
@@ -82,6 +96,7 @@ export function AppLayout() {
       </div>
 
       <BottomNav />
+      <OnboardingWizard />
     </div>
   );
 }

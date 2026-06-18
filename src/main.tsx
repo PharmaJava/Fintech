@@ -4,6 +4,8 @@ import { registerSW } from 'virtual:pwa-register';
 
 import App from './App.tsx';
 import './styles/globals.css';
+// Captura temprana del evento de instalación PWA (beforeinstallprompt).
+import '@/lib/pwa/install';
 
 // Service worker: actualizacion automatica para que la app funcione offline.
 registerSW({ immediate: true });
