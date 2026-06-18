@@ -66,6 +66,41 @@ export const monthlySnapshot = (
   };
 };
 
+/** Punto de la serie de tasa de ahorro de un mes. */
+export interface SavingsRatePoint {
+  month: string; // YYYY-MM
+  income: Cents;
+  expense: Cents;
+  savings: Cents; // income - expense
+  /** Tasa de ahorro (ahorro / ingresos) 0..1, o `null` si no hubo ingresos. */
+  rate: number | null;
+}
+
+/**
+ * Serie de la tasa de ahorro de los últimos `count` meses hasta `endMonth`
+ * (inclusive), en orden ascendente. Para ver tu evolución mes a mes.
+ */
+export const savingsRateSeries = (
+  transactions: readonly Transaction[],
+  endMonth: string,
+  count: number,
+): SavingsRatePoint[] => {
+  const points: SavingsRatePoint[] = [];
+  for (let i = count - 1; i >= 0; i -= 1) {
+    const month = format(subMonths(parseISO(`${endMonth}-01`), i), 'yyyy-MM');
+    const flow = monthSummary(transactions, month);
+    const savings = subtractCents(flow.income, flow.expense);
+    points.push({
+      month,
+      income: flow.income,
+      expense: flow.expense,
+      savings,
+      rate: savingsRate(flow.income, savings),
+    });
+  }
+  return points;
+};
+
 /** Comparativa de un mes contra ti mismo `monthsAgo` meses atrás. */
 export interface SelfComparison {
   current: MonthlySnapshot;

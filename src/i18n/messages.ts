@@ -403,6 +403,45 @@ const es = {
   'blog.minutes': 'min de lectura',
   'blog.cta.title': 'Listo para tomar el control?',
   'blog.cta.button': 'Abrir Patrimonio',
+
+  'nav.expenses': 'Gastos',
+  'expenses.title': 'Gastos',
+  'expenses.subtitle': 'Registra lo que gastas y mira a dónde va tu dinero.',
+  'expenses.today': 'Hoy',
+  'expenses.week': 'Esta semana',
+  'expenses.month': 'Este mes',
+  'expenses.recent': 'Gastos de esta semana',
+  'expenses.empty': 'Sin gastos esta semana.',
+  'expenses.quick.amount': 'Importe del gasto',
+  'expenses.quick.add': 'Anadir gasto',
+  'expenses.quick.added': 'Gasto anadido',
+  'expenses.burn.title': 'Proyeccion de fin de mes',
+  'expenses.burn.lead': 'A este ritmo, este mes gastaras',
+  'expenses.burn.spent': 'Gastado',
+  'expenses.burn.daily': 'Media/dia',
+  'expenses.burn.days': 'Dias',
+  'expenses.burn.note':
+    'Es una extrapolacion del ritmo actual, no una prediccion.',
+  'expenses.subs.title': 'Suscripciones y gastos fijos',
+  'expenses.subs.lead':
+    'Gastos con el mismo concepto e importe en varios meses.',
+  'expenses.subs.empty':
+    'No se han detectado gastos recurrentes. Anade un concepto a tus gastos para identificarlos.',
+  'expenses.subs.total': 'Total mensual estimado',
+  'expenses.subs.charges': 'cargos',
+
+  'savings.title': 'Tasa de ahorro',
+  'savings.window': 'Ultimos 6 meses',
+
+  'json.title': 'Datos en JSON',
+  'json.export': 'Exportar JSON',
+  'json.import': 'Importar JSON',
+  'json.imported': 'registros importados',
+  'json.invalid': 'El archivo no es un JSON valido de Patrimonio.',
+  'json.confirm':
+    'Importar reemplazara TODOS tus datos actuales por los del archivo. Continuar?',
+  'json.help':
+    'Copia completa de tus datos en JSON plano (sin cifrar), para migrar o revisar. Para guardar copias seguras, usa el backup cifrado.',
 } as const;
 
 export type MessageKey = keyof typeof es;
@@ -804,6 +843,45 @@ const en: Record<MessageKey, string> = {
   'blog.minutes': 'min read',
   'blog.cta.title': 'Ready to take control?',
   'blog.cta.button': 'Open Patrimonio',
+
+  'nav.expenses': 'Expenses',
+  'expenses.title': 'Expenses',
+  'expenses.subtitle': 'Log what you spend and see where your money goes.',
+  'expenses.today': 'Today',
+  'expenses.week': 'This week',
+  'expenses.month': 'This month',
+  'expenses.recent': 'This week’s expenses',
+  'expenses.empty': 'No expenses this week.',
+  'expenses.quick.amount': 'Expense amount',
+  'expenses.quick.add': 'Add expense',
+  'expenses.quick.added': 'Expense added',
+  'expenses.burn.title': 'Month-end projection',
+  'expenses.burn.lead': 'At this pace, this month you’ll spend',
+  'expenses.burn.spent': 'Spent',
+  'expenses.burn.daily': 'Avg/day',
+  'expenses.burn.days': 'Days',
+  'expenses.burn.note':
+    'It extrapolates your current pace; it is not a prediction.',
+  'expenses.subs.title': 'Subscriptions and fixed costs',
+  'expenses.subs.lead':
+    'Expenses with the same concept and amount across months.',
+  'expenses.subs.empty':
+    'No recurring expenses detected. Add a concept to your expenses to identify them.',
+  'expenses.subs.total': 'Estimated monthly total',
+  'expenses.subs.charges': 'charges',
+
+  'savings.title': 'Savings rate',
+  'savings.window': 'Last 6 months',
+
+  'json.title': 'Data as JSON',
+  'json.export': 'Export JSON',
+  'json.import': 'Import JSON',
+  'json.imported': 'records imported',
+  'json.invalid': 'The file is not a valid Patrimonio JSON.',
+  'json.confirm':
+    'Importing will replace ALL your current data with the file’s data. Continue?',
+  'json.help':
+    'Full copy of your data in plain JSON (unencrypted), to migrate or review. For safe backups, use the encrypted backup.',
 };
 
 export const messages = { es, en };

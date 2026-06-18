@@ -10,6 +10,7 @@ import { DashboardPage } from './routes/DashboardPage';
 import { FirePage } from './routes/FirePage';
 import { NetworthPage } from './routes/NetworthPage';
 import { SettingsPage } from './routes/SettingsPage';
+import { ExpensesPage } from '@/features/expenses/ExpensesPage';
 import { TimelinePage } from '@/features/timeline/TimelinePage';
 import { TransactionsPage } from './routes/TransactionsPage';
 
@@ -37,6 +38,7 @@ export const router = createBrowserRouter(
         { path: 'networth', element: <NetworthPage /> },
         { path: 'timeline', element: <TimelinePage /> },
         { path: 'transactions', element: <TransactionsPage /> },
+        { path: 'expenses', element: <ExpensesPage /> },
         { path: 'budgets', element: <BudgetsPage /> },
         { path: 'fire', element: <FirePage /> },
         { path: 'settings', element: <SettingsPage /> },
