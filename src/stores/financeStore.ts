@@ -108,6 +108,7 @@ interface FinanceState {
     name: string,
     kind: CategoryKind,
     color: string,
+    parentId?: string,
   ) => Promise<void>;
   deleteCategory: (id: string) => Promise<void>;
 
@@ -194,8 +195,13 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
     set({ accounts: await accountRepository.getAll() });
   },
 
-  addCategory: async (name, kind, color) => {
-    await categoryRepository.add({ name, kind, color });
+  addCategory: async (name, kind, color, parentId) => {
+    await categoryRepository.add({
+      name,
+      kind,
+      color,
+      ...(parentId ? { parentId } : {}),
+    });
     set({ categories: await categoryRepository.getAll() });
   },
 

@@ -145,6 +145,8 @@ export const messages = {
     'categories.empty': 'Sin categorias.',
     'categories.kind.income': 'Ingreso',
     'categories.kind.expense': 'Gasto',
+    'categories.parent': 'Categoria padre',
+    'categories.noParent': 'Sin categoria padre (principal)',
 
     'csv.title': 'Importar / Exportar (CSV)',
     'csv.export': 'Exportar CSV',

@@ -19,6 +19,7 @@ import { t } from '@/i18n';
 import { useFinanceStore } from '@/stores/financeStore';
 import type { TransactionType } from '@/types/domain';
 
+import { orderedCategories } from './categoryTree';
 import { TRANSACTION_TYPES, transactionTypeLabel } from './labels';
 
 /** Dialogo para registrar un movimiento (ingreso/gasto/transferencia). */
@@ -39,9 +40,7 @@ export function AddTransactionDialog() {
 
   const visibleCategories = useMemo(
     () =>
-      categories.filter((c) =>
-        type === 'income' ? c.kind === 'income' : c.kind === 'expense',
-      ),
+      orderedCategories(categories, type === 'income' ? 'income' : 'expense'),
     [categories, type],
   );
 
@@ -50,7 +49,7 @@ export function AddTransactionDialog() {
     setError(null);
     const value = Number(amount);
     const account = accountId || accounts[0]?.id;
-    const category = categoryId || visibleCategories[0]?.id;
+    const category = categoryId || visibleCategories[0]?.category.id;
     if (!Number.isFinite(value) || value <= 0) {
       setError('Introduce un importe valido');
       return;
@@ -142,12 +141,12 @@ export function AddTransactionDialog() {
             </Label>
             <Select
               id="txn-category"
-              value={categoryId || (visibleCategories[0]?.id ?? '')}
+              value={categoryId || (visibleCategories[0]?.category.id ?? '')}
               onChange={(e) => setCategoryId(e.target.value)}
             >
-              {visibleCategories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
+              {visibleCategories.map((n) => (
+                <option key={n.category.id} value={n.category.id}>
+                  {n.label}
                 </option>
               ))}
             </Select>
